@@ -1,158 +1,811 @@
-{% extends "ArjunVaas/hometemplate.html" %}
-
-
+{% comment %} {% extends "ArjunVaas/productstemplate.html" %} {% endcomment %}
 {% load static %}
 
-{% block content %}
-    <img src="{{ img_name }}">
-    <main>
-        <div class="container">
-            <!-- Third row -->
-            <div class="row mt-12 d-flex flex-column align-items-center justify-content-center">
-                <div class="row mt-3">
-                    <div class="col">
-                        Select Skin Color
-                        <hr class="hr-1">
-                    </div>
-                    <div class="col">
-                        {% if selected_profile.skin %}
-                        <a href="#" onclick="window.location.href = 'user-profile'" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                        {% else %}
-                        <a href="#" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                        {% endif %}
-                        <hr class="hr-2">
-                    </div>
-                </div>
-                <div id="profile_image" class="col-12" style="padding: 10;">
-                    <div class="rounded shadow border border-dark mx-auto mt-3 d-flex align-items-center justify-content-center">
-                        <img src="/{{ selected_profile.picture }}" class="rounded shadow border border-dark mx-auto"
-                             style="width: 100%"/>
-                    </div>
-                </div>
-            </div>
-            <!-- Fourth row -->
-            <div class="my-margin row mt-5 d-flex flex-column align-items-center justify-content-center">
-                <form method="post" action="user-profile">
-                    {% csrf_token %}
-                    <div class="col-9">
-                        {% if selected_profile.skin %}
-                        <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="{{ selected_profile.skin }}">
-                        {% else %}
-                        <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="#FAC7C8">
-                        {% endif %}
-                        <label for="colorpicker" style="font-size: 70%;">Pick color from facial skin</label>
-                    </div>
-                    {% if selected_profile.skin %}
-                    <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
-                            class="btn btn-primary" style="width: 100%; margin-top: 5%;">Continue
-                    </button>
-                    {% else %}
-                    <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
-                            class="btn btn-primary" style="width: 90%; margin-top: 5%;" disabled>Continue
-                    </button>
-                    {% endif %}
-                </form>
-            <div class="aksh" style="margin-top: 2rem">
-                            <a href="https://youtube.com" style="display: inline;">
-                                <h5 class="tetExplm">See examples how to select skin color.</h5>
-                            </a>
-                        </div>
-            </div>
-        </div>
-        <footer>
-    
-            <nav class="mobile-bottom-nav">
-                <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
-                     <a href="/" class="mobile-bottom-nav__item-content">
-                        <i class="fa-solid fa-house IcnFooter"></i>
-                           <h5 class="gghg">Home</h5>
-                     </a>			
-                </div>
-              
-               <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
-                <a href="/tryons" class="mobile-bottom-nav__item-content">
-                   <i class="fa fa-heart IcnFooter"></i>
-                      <h5 class="gghg">Wish List</h5>
-                </a>		
-           </div>
-                
-             
-            </nav>
-        </footer>
-    </main>
+{% block headerscripts %}
+    <style>
 
-{% endblock %}
-
-{% block footerscripts %}
-    <script>
-        function update_continue() {
-            document.getElementById('continue_button').disabled = false
+        body {
+            background-color: #FEF9FFFF !important;
         }
-    </script>
-<style>
-    .mobile-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 0;
-  will-change: transform;
-  transform: translateZ(0);
-  display: flex;
-  height: 50px;
-  box-shadow: 0 -2px 40px -2px #db9616;
-  background-color: #272424;
-}
-.mobile-bottom-nav__item {
-  flex-grow: 1;
-  text-align: center;
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-/* .mobile-bottom-nav__item--active {
-  color: red;
-} */
-.mobile-bottom-nav__item-content {
-  display: flex;
-  flex-direction: column;
-}
-h5.gghg {
-    font-size: 13px;
-}
-a.mobile-bottom-nav__item-content {
-    color: #f7ecec;
-}
-.IcnFooter {
-    font-size: 22px;
-    margin-top: 12px;
+
+        #nav-btn {
+            background-color: #FEF9FFFF !important;
+        }
+
+        .product__img {
+            float: left;
+            height: 250px;
+            object-fit: cover;
+            border-radius:8%;
+        }
+
+        .filter-select {
+            padding: 10%;
+        }
+
+        .filter-select:hover {
+            background-color: rgb(44 44 44 / 15%);
+        }
+
+        .filter-select.selected {
+            background-color: rgb(44 44 44 / 15%);
+        }
+
+        .select-option-container {
+            flex-grow: 0.4 !important;
+        }
+
+        .options-container {
+            border-left: 2px solid rgba(0, 0, 0, 0.16);
+            margin-left: 5%;
+            height: 500px;
+          overflow-y: scroll;
+        }
+
+        .option-container {
+            padding: 7%;
+            border-bottom: 1px solid rgb(44 44 44 / 15%);
+            display: inline-flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .color-checkbox {
+            float: left;
+        }
+
+        .color-span {
+            float: left;
+            margin-left: 5%;
+        }
+
+        .type-checkbox {
+            float: left;
+        }
+
+        .type-span {
+            float: left;
+            margin-left: 5%;
+        }
+
+        .image-slider{
+    display: flex;      
+    padding: 1rem;
+    background-color: #fff;
+    /* margin: 1px; */
 }
 
-img.header-image {
-    position: fixed;
-    right: 0;
-    border-radius: 100%;
-    height: 50px;
-    width: 50px !important;
-    box-shadow: 0 -2px 5px -2px #333;
-    background-color: #fff;
-    left: 41%;
-    padding: 9px;
-    /* height: 65px; */
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%,-50%);
-    /* width: 65px !important; */
-    bottom: 5px;
-    left: 50%;
-    margin: 0 !important;
-    /* width: 23px; */
+/* .slide img{
+    border-radius: 10%;
+    height: 13rem;
+} */
+
+.slides{
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
 }
-footer span {
-    font-size: 0.8rem;
+
+.slides::-webkit-scrollbar{
     display: none;
 }
 
-</style>
+/* .slides > div{
+transform: scale(1);
+position: relative;
+transition: transform 0.5s;
+transform-origin: center center;
+display: flex;
+scroll-snap-align: start;
+flex-shrink: 0;
+margin: 1px 5px 1px 5px;
+margin: 1rem;
+justify-content: center;
+align-items: center;
+} */
+
+ol, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+/* .carousel__navigation-list,
+.carousel__navigation-item {
+  display: flex;
+  position: relative;
+  align-self: flex-end;
+  right: 10rem;
+  bottom: 2rem;
+} */
+
+.carousel__navigation-button {
+  width: 1rem;
+  height: 1rem;
+  background-color:#C70039;
+  background-clip: content-box;
+  border: 0.25rem solid transparent;
+  border-radius: 50%;
+  font-size: 0;
+  transition: transform 0.1s;
+}
+
+
+
+/* .carousel__navigation-button:active{
+    background-color:#F78181;
+} */
+
+/* .carousel__navigation-item:active{
+    background-color:#F78181 !important;
+} */
+/* .carousel__navigation-item:target{
+    background-color:#fc03f4 !important;
+} */
+
+.carousel__navigation-button.active {
+    background-color:#C70039 !important;
+}
+
+.carousel {
+    position: relative;
+    padding-top: 75%;
+    filter: drop-shadow(0 0 10px #0003);
+    perspective: 100px;
+    height: 18rem;
+  }
+
+  .carousel__viewport {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    overflow-x: scroll;
+    counter-reset: item;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+  }
+
+  .carousel__slide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    counter-increment: item;
+    margin:1rem 1rem 0 1rem;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .carousel__slide:before {
+    content: counter(item);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-40%,70px);
+    color: #fff;
+    font-size: 1.4em;
+  }
+
+  .carousel__snapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: center;
+    padding: 0.5rem;
+  }
+
+  @media (hover: hover) {
+    .carousel__snapper {
+      animation-name: tonext, snap;
+      animation-timing-function: ease;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+    }
+
+    .carousel__slide:last-child .carousel__snapper {
+      animation-name: tostart, snap;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__snapper {
+      animation-name: none;
+    }
+  }
+
+  .carousel:hover .carousel__snapper,
+  .carousel:focus-within .carousel__snapper {
+    animation-name: none;
+  }
+
+  .carousel__navigation {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    margin-top: -8%;
+    margin-bottom: -5%;
+    {#top: 2.8rem;#}
+  }
+
+  .carousel__navigation-list,
+  .carousel__navigation-item {
+    display: inline-block;
+    margin-left: -0.2rem;
+  }
+
+  .carousel__navigation-button {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-color: #cbcbcb;
+    background-clip: content-box;
+    border: 0.25rem solid transparent;
+    border-radius: 50%;
+    font-size: 0;
+    transition: transform 0.1s;
+  }
+
+  .carousel::before,
+  .carousel::after,
+  .carousel__prev,
+  .carousel__next {
+    position: absolute;
+    top: 0;
+    margin-top: 37.5%;
+    width: 4rem;
+    height: 4rem;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    font-size: 0;
+    outline: 0;
+  }
+
+  .carousel::before,
+  .carousel__prev {
+    left: -1rem;
+  }
+
+  .carousel::after,
+  .carousel__next {
+    right: -1rem;
+  }
+  {#.product-card {#}
+  {#  margin-top: -5%;#}
+  {#}#}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <main>
+        {% comment %} <div class="container">
+            <a href="{{ banner.href }}" target="_blank">
+                <img src="/{{ banner.img }}" alt="" class="peoples-img | mx-auto">
+            </a>
+        </div> {% endcomment %}
+        <div class="container">
+            <!-- Third row -->
+            <div class="">
+                <!--
+                <div style="margin-bottom: 5%;">
+                    <a href="javascript:history.back()"><i class="fa-sharp fa-solid fa-arrow-left ml-3 my-3"
+                                                           style="color: #222; float: left;"></i></a>
+                    <h5 style="padding-top: 3%;padding-left: 15%;" class="font-weight-bold">{{ brand_name }}
+                        - {{ category_name }}</h5>
+                </div>
+                -->
+                <div class="products">
+                    {% for product in products %}
+                         <!-- <article class="product">
+                            <a href="../product/{{ product.id }}">
+                                <img src="/{{ product.main_image }}" alt="" class="product__img">
+                            </a>
+                            
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="product__name | mb-0 mr-2">{{ product.name }}</p>
+                                <i class="product__heart-icon"></i>
+                            </div>
+                            
+                        </article>  -->
+                         <div class="product-card">
+                        <!-- <div class="image-slider" style="width: 18rem;">
+                            <div class="slides" id="carouselExampleCaptions">
+                                 <ol class="carousel-indicators">
+                                    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                                    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                                </ol>
+                                <div class="slide" id="main_image_{{forloop.counter}}">
+                                    <img class="" src="/{{ product.main_image }}" alt="Card image cap">
+                                </div>
+                                {% if product.image_1 %}
+                                <div class="slide" id="image_1_{{forloop.counter}}">
+                                    <img class="" src="/{{ product.image_1 }}" alt="Card image cap">
+                                </div>
+                                {% endif %}
+                                {% if product.image_2 %}
+                                <div class="slide" id="image_2_{{forloop.counter}}">
+                                    <img class="card-img-top" src="/{{ product.image_2 }}" alt="Card image cap">
+                                </div>
+                                {% endif %}
+                                {% if product.image_3 %}
+                                <div class="slide" id="image_3_{{forloop.counter}}">
+                                    <img class="card-img-top" src="/{{ product.image_3 }}" alt="Card image cap">
+                                </div>
+                                {% endif %}
+                                {% if product.image_4 %}
+                                <div class="slide" id="image_4_{{forloop.counter}}">
+                                    <img class="card-img-top" src="/{{ product.image_4 }}" alt="Card image cap">
+                                </div>
+                                {% endif %}
+                            </div>
+                            <ol class="carousel__navigation-list">
+                                <li data-target="#main_image_{{forloop.counter}}">
+                                <a href="#main_image_{{forloop.counter}}" class="carousel__navigation-button">
+                                </a>    
+                                </li>
+                                {% if product.image_1 %}
+                                  <li data-target="#image_1_{{forloop.counter}}"
+                                     class="carousel__navigation-button">
+                                     <a href="#image_1_{{forloop.counter}}" class="carousel__navigation-button">
+                                    </a>
+                                </li>
+                               {% endif %}
+                                
+                               {% if product.image_2 %}
+                                  <li href="#image_2_{{forloop.counter}}"
+                                     class="carousel__navigation-button">
+                                     <a href="#image_2_{{forloop.counter}}" class="carousel__navigation-button">
+                                    </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% if product.image_3 %}
+                                  <li href="#image_3_{{forloop.counter}}"
+                                     class="carousel__navigation-button">Go to slide 3</li>
+                                {% endif %}
+                                
+                                {% if product.image_4 %}
+                                  <li href="#image_4_{{forloop.counter}}"
+                                     class="carousel__navigation-button">Go to slide 4</li>
+                                {% endif %}
+                            </ol>                            
+                            
+                          </div>
+                          <div>
+                              <span class="product-name">{{product.name}}</span>
+                            <div class="product-action">
+                              <span style="display: flex;"><i class="rupee-icon"></i>{{product.price}}</span>
+                              <a href="#" class=""><i class="buy-icon"></i></a>
+                              <a href="#" class=""><i class="try-icon"></i></a>
+                            </div>
+                          </div> -->
+
+
+                          <section id="carousel" class="carousel slide" aria-label="Gallery">
+                            <ol class="carousel__viewport">
+                                <li id="main_image_{{forloop.counter}}"
+                                    tabindex="0"
+                                    class="carousel__slide">
+                                    <div class="carousel__snapper">
+                                        <img class="product__card-image" src="/{{ product.main_image }}" alt="Card image cap">
+                                    </div>
+                                    {% if product.is_try_on_main_image_enabled %}
+                                    <a class="try-button" href="/product/{{product.id}}?img=main_image" ><i class="try-icon"></i></a>
+                                    {% endif %}
+                                </li>
+                                {% if product.image_1 %}
+                                <li id="image_1_{{forloop.counter}}"
+                                    tabindex="0"
+                                    class="carousel__slide">
+                                    <div class="carousel__snapper">
+                                        <img class="product__card-image" src="/{{ product.image_1 }}" alt="Card image cap">
+                                    </div>
+                                    {% if product.is_try_on_image1_enabled %}
+                                    <a class="try-button" href="/product/{{product.id}}?img=image1" class=""><i class="try-icon"></i></a>
+                                   {% endif %}
+                                </li>
+                                {% endif %}
+                                {% if product.image_2 %}
+                                <li id="image_2_{{forloop.counter}}"
+                                    tabindex="0"
+                                    class="carousel__slide">
+                                    <div class="carousel__snapper">
+                                        <img class="product__card-image" src="/{{ product.image_2 }}" alt="Card image cap">
+                                    </div>
+                                    {% if product.is_try_on_image2_enabled %}
+                                    <a class="try-button" href="/product/{{product.id}}?img=img=image2" class=""><i class="try-icon"></i></a>
+                                    {% endif %}
+
+                                </li>
+                                {% endif %}
+                            </ol>
+                          </section>
+                         <div class="carousel__navigation">
+                              <ol class="carousel__navigation-list">
+                                <li class="carousel__navigation-item active" data-slide-to="0">
+                                  <a href="#main_image_{{forloop.counter}}"
+                                     class="carousel__navigation-button"></a>
+                                </li>
+                                {% if product.image_1 %}
+                                <li class="carousel__navigation-item active" data-slide-to="1">
+                                  <a href="#image_1_{{forloop.counter}}"
+                                     class="carousel__navigation-button"></a>
+                                </li>
+                                {% endif %}
+                                {% if product.image_2 %}
+                                <li class="carousel__navigation-item active" data-slide-to="1">
+                                  <a href="#image_2_{{forloop.counter}}"
+                                     class="carousel__navigation-button"></a>
+                                </li>
+                                {% endif %}
+                              </ol>
+                            </div>
+
+
+
+                          
+                         <div style="padding: 0;text-align: center">
+                                <span class="product-name">{{product.name}}</span>
+                              <div class="product-action">
+<div class='row' style="width: 100%; margin: -5% 0 0; text-align: left">
+  <div class='col' style="padding: 0;flex: 40%">
+    <div>
+      <img src="/static/ArjunVaas/img/icons/rupee.png"
+           style="display: inline; vertical-align:middle; margin-right: -8%; width: 22%;margin-left:13%"/>
+      <span style="vertical-align:-10% ; font-size: 0.9rem">{{ product.price|floatformat:"0" }}</span>
+    </div>
+  </div>
+  {% comment %} <div class='col' style="padding: 0;flex: 30%">
+    <a href="/product/{{product.id}}?img=image1" class="product-action-text" style="border-bottom: 2px solid red">
+      Try
+    </a>
+  </div> {% endcomment %}
+  <div class='col' style="padding: 0; flex: 30%">
+    <a href="{{ product.url }}" class="product-action-text">
+      Buy Now
+    </a>
+  </div>
+</div>
+                                <!-- <a class="try-button" href="#" class=""><i class="try-icon"></i></a> -->
+                              </div>
+                            </div>
+                        </div>
+                          <!-- <div class="bd-example">
+                            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                                    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                                  </ol>
+
+                                  <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img class="" src="/{{ product.main_image }}" alt="Card image cap">
+                                    </div>
+                                    {% if product.image_1 %}
+                                    <div class="carousel-item active">
+                                        <img src="/{{ product.image_1 }}" class="d-block w-100" alt="...">
+                                    </div>
+                                    {% endif %}
+                                    {% if product.image_2 %}
+                                    <div class="carousel-item active">
+                                        <img src="/{{ product.image_2 }}" class="d-block w-100" alt="...">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                          </div> -->
+
+                    {% endfor %}
+                    {% for extra_product in extra_products %}
+                        <article class="product">
+                            <img src="" alt="" class="product__img">
+                            <!--
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="product__name | mb-0 mr-2"></p>
+                            </div>
+                            -->
+                        </article>
+                    {% endfor %}
+                    </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document" style="height: 100%">
+            <div class="modal-content" style="height: 100%">
+                <div class="modal-header">
+                    <!-- <h5>{{ brand_name }} - {{ gender }} - {{ category_name }}</h5> -->
+                    <!--<h5 class="modal-title" id="exampleModalLabel">Try-on</h5>-->
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col select-option-container">
+                                <div id="select-color" class="row filter-select selected"
+                                     onclick="change_selected(this.id)">Color
+                                </div>
+                                <div id="select-type" class="row filter-select" onclick="change_selected(this.id)">
+                                    Type
+                                </div>
+                              <div id="select-price" class="row filter-select" onclick="change_selected(this.id)">
+                                    Price
+                                </div>
+                            </div>
+                            <div id="option-color-container" class="col options-container">
+
+                            </div>
+                            <div id="option-type-container" class="col options-container" hidden>
+                            </div>
+                            <div id="option-price-container" class="col options-container" hidden>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="justify-content: space-around; z-index: 99">
+                    <a href="#" onclick="location.reload()" style="float: left;">
+                        Cancel
+                    </a>
+                    <div style="border-left:1px solid #3e3e3e2e;height:20px"></div>
+                    <a href="#" onclick="apply_filters()" style="color: #ff5654">
+                        Apply
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div style="flex: 33.33%;position: fixed;right: 0.5rem;bottom: 8rem;"><a href="/tryons">
+        <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="margin-right: auto; margin-left: auto; width: 2.8rem;">        
+    </a></div>
+
+        <a data-toggle="modal" data-target="#exampleModal" class="product-filter-button" style="right:0.5rem;"><img src="{% static 'ArjunVaas/img/icons/filter.png' %}" style="width:2.6rem;margin-bottom: 4rem" /></a>
+
+
+      <div style="height: 4rem; width: 100%; background-color: white"></div>
+    </main>
+
+    <!-- Modal -->
+{% endblock %}
+
+{% block footerscripts %}
+
+    <script>
+        function change_selected(id) {
+            document.getElementById(id).classList.add('selected')
+
+            if (id === "select-color") {
+                document.getElementById("select-type").classList.remove('selected');
+                document.getElementById("select-price").classList.remove('selected');
+                document.getElementById("option-price-container").setAttribute("hidden", true);
+                document.getElementById("option-type-container").setAttribute("hidden", true);
+                document.getElementById("option-color-container").removeAttribute("hidden");
+            } else if (id === "select-type") {
+                document.getElementById("select-color").classList.remove('selected');
+                document.getElementById("select-price").classList.remove('selected');
+                document.getElementById("option-price-container").setAttribute("hidden", true);
+                document.getElementById("option-color-container").setAttribute("hidden", true);
+                document.getElementById("option-type-container").removeAttribute("hidden");
+            } else {
+              document.getElementById("select-color").classList.remove('selected');
+              document.getElementById("select-type").classList.remove('selected');
+              document.getElementById("option-type-container").setAttribute("hidden", true);
+              document.getElementById("option-color-container").setAttribute("hidden", true);
+              document.getElementById("option-price-container").removeAttribute("hidden");
+          }
+        }
+
+        function clear_all_types() {
+            var types = document.getElementsByClassName("type-checkbox");
+            for (let i = 0; i < types.length; i++) {
+                types[i].checked = false
+            }
+        }
+        function clear_all_colors() {
+            var colors = document.getElementsByClassName("color-checkbox");
+            for (let i = 0; i < colors.length; i++) {
+                colors[i].checked = false
+            }
+        }
+        function clear_all_prices() {
+            var prices = document.getElementsByClassName("price-checkbox");
+            for (let i = 0; i < prices.length; i++) {
+                prices[i].checked = false
+            }
+        }
+        {#function get_colors() {#}
+        {#  #}
+        {#                  return colors#}
+        {#})#}
+        {#  return colors#}
+        {#}#}
+
+        function apply_filters() {
+            var i = 0;
+
+            param_url = "?&colors=["
+            first_color = true
+
+            var colors = document.getElementsByClassName("color-checkbox");
+            for (i = 0; i < colors.length; i++) {
+                if (colors[i].checked === true) {
+                    if (first_color === false) {
+                        param_url += ','
+                    }
+                    param_url += "'" + colors[i].value + "'"
+                    first_color = false
+                }
+            }
+            param_url += "]&types=["
+            first_type = true
+
+            var types = document.getElementsByClassName("type-checkbox");
+            for (i = 0; i < types.length; i++) {
+                if (types[i].checked === true) {
+                    if (first_type === false) {
+                        param_url += ','
+                    }
+                    param_url += "'" + types[i].value + "'"
+                    first_type = false
+                }
+            }
+            param_url += "]&prices="
+            first_price = true
+          var prices = document.getElementsByClassName("price-checkbox");
+            for (i = 0; i < prices.length; i++) {
+                if (prices[i].checked === true) {
+                    if (first_price === false) {
+                        param_url += ','
+                    }
+                    param_url += prices[i].value
+                    first_price = false
+                }
+            }
+
+
+            url = window.location.href
+            if (url.includes("?")) {
+                url = url.split("?")[0]
+            }
+
+            window.location.href = url + param_url
+        }
+
+        let slides = document.querySelectorAll('.carousel__slide')
+        slides.forEach(slide => {
+            slide.addEventListener('slide', function(){
+                console.log('slided')
+            })
+        })
+
+         $(document).ready(function(){
+    $(".carousel").on('slide.bs.carousel', function () {
+         document.querySelector(".carousel__navigation-list").style.backgroundColor = "red";
+     });
+     $('.carousel').carousel({
+        interval: false,
+      });
+ });
+
+$('#product-carousel').on('slid.bs.carousel', function (event) {
+    var nextactiveslide = $(event.relatedTarget).index();
+    var $btns = $('.carousel-buttons');
+    var $active = $btns.find("[data-slide-to='" + nextactiveslide + "']");
+    $btns.find('.img-circle').removeClass('active');
+    $active.find('.img-circle').addClass('active');
+});
+    </script>
+  <script>
+$(document).ready(function(){
+  let lastTab = localStorage.getItem('categoryId');
+  if (lastTab === null){
+    lastTab = "{{ categories.0.id | escapejs }}"
+  }
+  let colors = []
+  let types = []
+  let ranges = ["-200", "200-400", "400-600", "600-900", "800-1000", "1000-1200", "1200-1400", "1400-1600", "1600-1800", "1800-2000", "2000-"]
+  document.getElementById("option-color-container").innerHTML = ""
+  document.getElementById("option-type-container").innerHTML = ""
+  document.getElementById("option-price-container").innerHTML = ""
+  fetch(`/products/json/${lastTab}`)
+  .then(response => response.json())
+  .then((response) => {
+    let products = response.data
+    for (let i = 0; i < products.length; i++) {
+      if (colors.includes(products[i].color) === false) {
+        colors.push(products[i].color)
+      }
+      if (types.includes(products[i].type) === false) {
+        types.push(products[i].type)
+      }
+    }
+    console.log(colors)
+    let selected_colors = {{ selected_colors|safe }};
+    let selected_types = {{ selected_types|safe }};
+    let selected_ranges = {{ selected_ranges|safe }};
+
+  let colors_html =
+    `<p style="float: right; color: #e13980" onclick="clear_all_colors()"><b>CLEAR ALL</b></p>
+                                <br>`
+  for (let i = 0; i < colors.length; i++) {
+    if (selected_colors.includes(colors[i]) === true) {
+      colors_html += `
+                                        <div class="option-container" >
+                                            <input type="checkbox" checked class="color-checkbox"
+                                                   value="${colors[i]}"><span class="color-span"> ${colors[i]}</span>
+                                        </div>
+                                    `
+    } else {
+      colors_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" class="color-checkbox"
+                                                   value="${colors[i]}"><span class="color-span">${colors[i]}</span>
+                                        </div>
+                                    `
+    }
+  }
+  let types_html = `<p style="float: right; color: #e13980" onclick="clear_all_types()"><b>CLEAR ALL</b></p>
+                                <br>`
+  for (let i = 0; i < types.length; i++) {
+    if (selected_types.includes(types[i]) === true) {
+      types_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" checked class="type-checkbox"
+                                                   value="${types[i]}"><span class="type-span"> ${types[i]}</span>
+                                        </div>
+                                    `
+    } else {
+      types_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" class="type-checkbox"
+                                                   value="${types[i]}"><span class="type-span">${types[i]}</span>
+                                        </div>
+                                    `
+    }
+  }
+  let ranges_html = `<p style="float: right; color: #e13980" onclick="clear_all_prices()"><b>CLEAR ALL</b></p>
+                                <br>`
+  for (let i = 0; i < ranges.length; i++) {
+    let show_range = "";
+    if (ranges[i] === "-200") {
+      show_range = "Under 200"
+    } else if (ranges[i] === "2000-") {
+      show_range = "Over 2000"
+    } else {
+      show_range = ranges[i]
+  }
+    if (selected_ranges.includes(ranges[i]) === true) {
+      ranges_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" checked class="price-checkbox"
+                                                   value="${ranges[i]}"><span class="color-span"> ${show_range}</span>
+                                        </div>
+                                    `
+    } else {
+      ranges_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" class="price-checkbox"
+                                                   value="${ranges[i]}"><span class="color-span">${show_range}</span>
+                                        </div>
+                                    `
+    }
+  }
+  document.getElementById("option-color-container").innerHTML += colors_html
+  document.getElementById("option-type-container").innerHTML += types_html
+  document.getElementById("option-price-container").innerHTML += ranges_html
+})
+
+});
+    </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 {% endblock %}
