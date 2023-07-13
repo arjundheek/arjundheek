@@ -204,6 +204,17 @@ footer span {
                             {#colors_query = JSON.parse(colors_query)#}
                             let types_query = urlParams.get('types');
                             types_query = types_query && types_query.split("'").join('"')
+                          let lower_price = 0;
+                          let upper_price = 1000000;
+                            let prices_query = urlParams.get('prices');
+                            prices_query = prices_query && prices_query.split(",")
+                          let ranges = []
+                          if (prices_query) {
+                          for (let rng of prices_query) {
+                            ranges.push(rng.split('-'));
+                          let prices = rng.split('-');
+                          ranges.push([parseInt(prices[0]), parseInt(prices[1])]);
+                          }}
                             {#types_query = JSON.parse(types_query)#}
 
                           let products = response.data
@@ -228,6 +239,18 @@ footer span {
                               if (types_query !== null && types_query.trim() !== "" && types_query !== "[]" && !types_query.includes(product_type)){
                                 console.log('continue')
                                 continue
+                              }
+                              let sp = true;
+                              for (let rng of ranges) {
+                                  if (product_price < rng[0] || product_price > rng[1]) {
+                                      sp = false;
+                                  } else {
+                                      sp = true;
+                                      break;
+                                  }
+                              }
+                              if (!sp) {
+                                  continue;
                               }
                                 let productCard = `<div class="product-card">
                     <section id="carousel" class="carousel slide" aria-label="Gallery">
