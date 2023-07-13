@@ -568,10 +568,21 @@ ol, li {
         <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="margin-right: auto; margin-left: auto; width: 2.8rem;">        
     </a></div>
 
-        <a data-toggle="modal" data-target="#exampleModal" class="product-filter-button" style="right:0.5rem;"><img src="{% static 'ArjunVaas/img/icons/filter.png' %}" style="width:2.6rem;margin-bottom: 4rem" /></a>
+        <a data-toggle="modal" data-target="#exampleModal" class="product-filter-button" style="right:0.5rem;">
+          <div>
+            <img src="{% static 'ArjunVaas/img/icons/filter.png' %}" style="width:2.6rem;margin-bottom: 4rem" />
+            <span id="notification-dot" style=" height: 15px; display:none;
+    width: 15px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;"></span>
+</div>
+        </a>
 
 
-      <div style="height: 4rem; width: 100%; background-color: white"></div>
+      <div style="height: 4rem; width: 100%; background-color: transparent"></div>
     </main>
 
     <!-- Modal -->
@@ -712,7 +723,7 @@ $(document).ready(function(){
   }
   let colors = []
   let types = []
-  let ranges = ["-200", "200-400", "400-600", "600-900", "800-1000", "1000-1200", "1200-1400", "1400-1600", "1600-1800", "1800-2000", "2000-"]
+  let ranges = ["-200", "200-400", "400-600", "600-800", "800-1000", "1000-1200", "1200-1400", "1400-1600", "1600-1800", "1800-2000", "2000-"]
   document.getElementById("option-color-container").innerHTML = ""
   document.getElementById("option-type-container").innerHTML = ""
   document.getElementById("option-price-container").innerHTML = ""
@@ -803,6 +814,25 @@ $(document).ready(function(){
   document.getElementById("option-type-container").innerHTML += types_html
   document.getElementById("option-price-container").innerHTML += ranges_html
 })
+  const urlParams = new URLSearchParams(window.location.search);
+  const colors_query = urlParams.get('colors')
+  const types_query = urlParams.get('types')
+  const prices_query = urlParams.get('prices')
+  let cq = false;
+  if (colors_query !== null && colors_query !== "" && colors_query !== undefined && colors_query !== "[]") {
+    cq = true;
+  }
+  let tq = false;
+  if (types_query !== null && types_query !== "" && types_query !== undefined && types_query !== "[]") {
+    tq = true;
+  }
+  let pq = false;
+  if (prices_query !== null && prices_query !== "" && prices_query !== undefined && prices_query !== "[]") {
+    pq = true;
+  }
+  if (cq === true || tq === true || pq === true) {
+    document.getElementById("notification-dot").style.display = "block"
+  }
 
 });
     </script>
