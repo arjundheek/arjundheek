@@ -39,6 +39,7 @@
             border-left: 2px solid rgba(0, 0, 0, 0.16);
             margin-left: 5%;
             height: 500px;
+          overflow-y: scroll;
         }
 
         .option-container {
@@ -551,7 +552,7 @@ ol, li {
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="justify-content: space-around">
+                <div class="modal-footer" style="justify-content: space-around; z-index: 99">
                     <a href="#" onclick="location.reload()" style="float: left;">
                         Cancel
                     </a>
@@ -786,14 +787,14 @@ $(document).ready(function(){
       ranges_html += `
                                         <div class="option-container">
                                             <input type="checkbox" checked class="price-checkbox"
-                                                   value="${ranges[i]}"><span class="color-span"> ${ranges[i]}</span>
+                                                   value="${ranges[i]}"><span class="color-span"> ${show_range}</span>
                                         </div>
                                     `
     } else {
       ranges_html += `
                                         <div class="option-container">
                                             <input type="checkbox" class="price-checkbox"
-                                                   value="${ranges[i]}"><span class="color-span">${ranges[i]}</span>
+                                                   value="${ranges[i]}"><span class="color-span">${show_range}</span>
                                         </div>
                                     `
     }
