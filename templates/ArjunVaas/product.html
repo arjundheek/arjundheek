@@ -127,13 +127,15 @@ footer span {
                 {% endif %}
                 <div style="display: flex;flex-direction: column;margin: 1rem 0 1rem 0;">
                     <span style="font-weight: 600;font-family: 'corbel', text size: 40px; sans-serif;">{{product.name}}</span>
-                    <span style="font-weight: 500;font-family: 'lato', text size: 40px; sans-serif;"> Code : {{product.code}}</span>
-                    <span style="display: flex;font-weight: 500;font-family: 'akshar', text size: 40px; sans-serif;"><i class="rupee-icon"></i> {{product.price|floatformat}}</span>
+                    <span style="font-weight: 500;font-family: 'lato', text size: 40px; san-s-serif;"> Code : {{product.code}}</span>
+                    <span style="display: flex; align-items: center; font-weight: 500;">
+                       <i class="rupee-icon" style="margin-top: 1.7%"></i> {{product.price|floatformat}}
+                    </span>
                 </div>
                 
                 <div style="display: flex;justify-content: space-around;">
                     <button onclick="location.href='{{product.url}}'" style="border-style: none;background-color: white; width: 33%">
-                      <img src="{% static 'ArjunVaas/img/icons/share.jpg' %}" style="width: 100%" href="{{product.url}}"/>
+                      <img src="{% static 'ArjunVaas/img/icons/buy.png' %}" style="width: 100%" href="{{product.url}}"/>
                       </button>
                     <!-- <form style="display: flex;justify-content: flex-end;" action="/save-tryon" method="POST"> -->
                         <!-- <a style="border-style: none;background-color: #fff;width: 40px;"><i class="heart-icon"></i></a> -->
@@ -142,7 +144,7 @@ footer span {
                             <input type="hidden" name="product" value="{{product.id}}" />
                             <input type="hidden" name="try_on_image_type" value="{{ request.GET.img }}" />
                             <button type="submit" onclick="showPopup()" style="border-style: none;background-color: white; ">
-                                <img src="{% static 'ArjunVaas/img/icons/share.jpg' %}" style="width: 100%" />
+                                <img src="{% static 'ArjunVaas/img/icons/save.png' %}" style="width: 100%" />
                             </button>
                         </form>
                         <button id="share_p_btn" style="border-style: none;background-color: white; width: 33%">
