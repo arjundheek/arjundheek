@@ -204,8 +204,6 @@ footer span {
                             {#colors_query = JSON.parse(colors_query)#}
                             let types_query = urlParams.get('types');
                             types_query = types_query && types_query.split("'").join('"')
-                          let lower_price = 0;
-                          let upper_price = 1000000;
                             let prices_query = urlParams.get('prices');
                             prices_query = prices_query && prices_query.split(",")
                           let ranges = []
@@ -218,7 +216,9 @@ footer span {
                             {#types_query = JSON.parse(types_query)#}
 
                           let products = response.data
+                          products.sort((a, b) => a.price - b.price);
                             document.querySelector('.products').innerHTML = ''
+                          let products_no = 0
                             for(index in products){
                                 let product = products[index]
                                 main_image = product.main_image
@@ -252,6 +252,7 @@ footer span {
                               if (!sp) {
                                   continue;
                               }
+                              products_no += 1
                                 let productCard = `<div class="product-card">
                     <section id="carousel" class="carousel slide" aria-label="Gallery">
                             <ol class="carousel__viewport">
@@ -344,7 +345,10 @@ footer span {
 
                             }
                             //productCard = !productCard ? '' : productCard[0].innerHTML
-
+if (products_no === 0){
+                                document.querySelector('.products').innerHTML = '<h4 style="text-align: center; width: 200%; margin-top: 10%">' +
+                                  'No products found...</h4>'
+                              }
                         })
                 }
                 const categories = document.querySelectorAll('.available-category')                
