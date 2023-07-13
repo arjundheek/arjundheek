@@ -82,11 +82,14 @@ def products(request, category):
     global profile_settings, selected_profile
     # get_user_profile(request.user)
 
-    selected_colors, selected_types = [], []
+    selected_colors, selected_types, selected_ranges = [], [], []
+    ranges = []
+    lower_price, upper_price = 0, 1000000
 
     if request.method == 'GET':
         get_colors = request.GET.get('colors')
         get_types = request.GET.get('types')
+        get_prices = request.GET.get('prices')
 
         if get_colors and get_colors != '[]':
             get_colors = get_colors.replace('"', '')
@@ -112,6 +115,20 @@ def products(request, category):
             else:
                 selected_types.append(get_types)
 
+        if get_prices:
+            get_prices = get_prices.split(',')
+            min_lp, max_up = 0, 1000000
+            for rng in get_prices:
+                selected_ranges.append(rng.strip())
+                prices = rng.split('-')
+                if len(prices) == 2:
+                    lp, up = prices[0], prices[1]
+                    if lp == '':
+                        lp = 0
+                    if up == '':
+                        up = 1000000
+                    ranges.append([int(lp), int(up)])
+
     profile_status = check_active_profile(request)
     if isinstance(profile_status, HttpResponse):
         return profile_status
@@ -131,7 +148,7 @@ def products(request, category):
     if len(data_products) > 0:
         for p in data_products:
             if p.gender.lower() == selected_profile.gender.lower():
-                st, sc = True, True
+                st, sc, sp = True, True, True
                 if len(selected_types) > 0:
                     if p.type not in selected_types:
                         st = False
@@ -140,7 +157,14 @@ def products(request, category):
                     if p.color not in selected_colors:
                         sc = False
 
-                if st and sc:
+                for rng in ranges:
+                    if p.price < rng[0] or p.price > rng[1]:
+                        sp = False
+                    else:
+                        sp = True
+                        break
+
+                if st and sc and sp:
                     display_products.append(p)
 
     for dp in display_products:
@@ -164,6 +188,7 @@ def products(request, category):
         'banner': Banner.objects.filter(page="products")[0],
         'selected_colors': selected_colors,
         'selected_types': selected_types,
+        'selected_ranges': selected_ranges,
         'brand_name': brand.name,
         'extra_products': extra_products,
         'selected_profile': selected_profile,
@@ -188,9 +213,9 @@ def product(request, id):
 
     template = loader.get_template('ArjunVaas/product.html')
     select_try_on = {
-        'main_image':product.try_on_main_image.url if product.try_on_main_image else '',
-        'image1':product.try_on_image1.url if product.try_on_image1 else '',
-        'image2':product.try_on_image2.url if product.try_on_image2 else '',
+        'main_image': product.try_on_main_image.url if product.try_on_main_image else '',
+        'image1': product.try_on_image1.url if product.try_on_image1 else '',
+        'image2': product.try_on_image2.url if product.try_on_image2 else '',
     }
     context = {
         'selected_profile': selected_profile,
@@ -199,22 +224,23 @@ def product(request, id):
         'category': category,
         'brand': brand,
         'profile_picture': selected_profile.picture,
-        'try_on_image': select_try_on.get(try_on_image,product.try_on_main_image),
+        'try_on_image': select_try_on.get(try_on_image, product.try_on_main_image),
     }
     return HttpResponse(template.render(context, request))
 
 
 def ProductJson(request, category):
     global profile_settings, selected_profile
-    products = Product.objects.filter(category = category,
-                gender__icontains=selected_profile.gender.lower())
-    
+    products = Product.objects.filter(category=category,
+                                      gender__icontains=selected_profile.gender.lower())
+
     serializer = ProductSerializer(products, many=True)
 
     return JsonResponse({
         'success': True,
-        'data':serializer.data,
+        'data': serializer.data,
     })
+
 
 @login_required(login_url='/login/')
 def slider2(request):
@@ -311,7 +337,6 @@ def create_new_profile(request):
     profile_status = check_active_profile(request)
     if isinstance(profile_status, HttpResponse):
         return profile_status
-
 
     new_user = User()
     new_user.username = random.randint(100000, 999999)
@@ -461,11 +486,12 @@ def user_profile_edit(request):
 
             selected_profile.picture = django_file
             selected_profile.user_id = selected_profile.user.id
+            print("hi")
             selected_profile.save()
             django_file.close()
             os.remove(f"static/uploads/profiles/{image_name}.jpg")
 
-        #selected_profile.save()
+        # selected_profile.save()
     """
     profile_status = check_active_profile(request)
     if isinstance(profile_status, HttpResponse):
@@ -512,10 +538,12 @@ def category(request, brand):
         if c not in sorted_categories:
             c.active = 0
             sorted_categories.append(c)
-    selected_colors, selected_types = [], []
+    selected_colors, selected_types, selected_ranges = [], [], []
+    lower_price, upper_price = 0, 100000
     if request.method == 'GET':
         get_colors = request.GET.get('colors')
         get_types = request.GET.get('types')
+        get_prices = request.GET.get('prices')
 
         if get_colors and get_colors != '[]':
             get_colors = get_colors.replace('"', '')
@@ -541,13 +569,25 @@ def category(request, brand):
             else:
                 selected_types.append(get_types)
 
+        if get_prices:
+            get_prices = get_prices.split(',')
+            for rng in get_prices:
+                selected_ranges.append(rng.strip())
+                prices = rng.split('-')
+                if len(prices) == 2:
+                    lp, up = prices[0], prices[1]
+                    if lp == '':
+                        lp = 0
+                    if up == '':
+                        up = 1000000
+                    lower_price, upper_price = int(lp), int(up)
+
     data_products = []
+    print(lower_price, upper_price)
     if len(sorted_categories) > 0:
         data_products = Product.objects.all().filter(category_id=sorted_categories[0].id)
         category_obj = Category.objects.get(id=sorted_categories[0].id)
         brand = Brand.objects.get(id=category_obj.brand.id)
-
-    
 
     display_products = []
     types = []
@@ -557,7 +597,7 @@ def category(request, brand):
         gender = data_products[0].gender
         for p in data_products:
             if p.gender.lower() == selected_profile.gender.lower():
-                st, sc = True, True
+                st, sc, sp = True, True, True
                 if len(selected_types) > 0:
                     if p.type not in selected_types:
                         st = False
@@ -568,9 +608,13 @@ def category(request, brand):
                     if p.color not in selected_colors:
                         sc = False
 
-                if st and sc:
-                    display_products.append(p)
+                if p.price < lower_price or p.price > upper_price:
+                    print(p.price, lower_price, upper_price)
+                    sp = False
 
+                if st and sc and sp:
+                    display_products.append(p)
+    print(display_products)
     # for dp in display_products:
     #     if dp.color not in colors:
     #         colors.append(dp.color)
@@ -583,7 +627,7 @@ def category(request, brand):
     print(colors, selected_colors)
 
     profile_status = check_active_profile(request)
-    
+
     context = {
         'brand_name': brand_obj.name,
         'logo': brand_obj.logo,
@@ -595,7 +639,7 @@ def category(request, brand):
 
     context.update({
         'category': category,
-        #'category_name': Category.objects.get(id=38).title,
+        # 'category_name': Category.objects.get(id=38).title,
         'gender': gender,
         'products': display_products,
         'colors': colors,
@@ -603,10 +647,11 @@ def category(request, brand):
         'banner': Banner.objects.filter(page="products")[0],
         'selected_colors': selected_colors,
         'selected_types': selected_types,
+        'selected_ranges': selected_ranges,
         'brand_name': brand.name,
         'extra_products': extra_products,
         'profile_picture': selected_profile.picture
-        })
+    })
     return HttpResponse(template.render(context, request))
 
 
@@ -751,11 +796,11 @@ def save_tryon(request):
             tryon.profile = selected_profile
             if try_on_image_type == 'main_image':
                 tryon.image = product.try_on_main_image
-            elif try_on_image_type == 'image1':                
+            elif try_on_image_type == 'image1':
                 tryon.image = product.try_on_image1
             else:
                 tryon.image = product.try_on_image2
-            
+
             tryon.url = product.url
             tryon.save()
 
