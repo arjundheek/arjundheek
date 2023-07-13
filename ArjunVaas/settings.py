@@ -28,7 +28,7 @@ DEBUG = True
 # ALLOWED_HOSTS = []
 
 # TODO - PRODUCTION
-ALLOWED_HOSTS = ['https://ec2-13-234-37-12.ap-south-1.compute.amazonaws.com', 'ec2-13-234-37-12.ap-south-1.compute.amazonaws.com', '13.234.37.12', 'localhost', '127.0.0.1','www.heroheroine.in']
+ALLOWED_HOSTS = ['https://ec2-13-234-37-12.ap-south-1.compute.amazonaws.com', 'ec2-13-234-37-12.ap-south-1.compute.amazonaws.com', '13.234.37.12', 'localhost', '127.0.0.1','www.heroheroine.in', '65.2.130.251']
 CSRF_TRUSTED_ORIGINS = ['https://ec2-13-234-37-12.ap-south-1.compute.amazonaws.com', 'https://*.ec2-13-234-37-12.ap-south-1.compute.amazonaws.com', 'https://13.234.37.12', 'http://13.234.37.12','http://127.0.0.1']
 
 # Application definition
