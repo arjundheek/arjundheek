@@ -771,10 +771,17 @@ $(document).ready(function(){
                                     `
     }
   }
-  let ranges_html = `<p style="float: right; color: #e13980" onclick="clear_all_ranges()"><b>CLEAR ALL</b></p>
+  let ranges_html = `<p style="float: right; color: #e13980" onclick="clear_all_prices()"><b>CLEAR ALL</b></p>
                                 <br>`
   for (let i = 0; i < ranges.length; i++) {
-    let show_range = ""
+    let show_range = "";
+    if (ranges[i] === "-200") {
+      show_range = "Under 200"
+    } else if (ranges[i] === "2000-") {
+      show_range = "Over 2000"
+    } else {
+      show_range = ranges[i]
+  }
     if (selected_ranges.includes(ranges[i]) === true) {
       ranges_html += `
                                         <div class="option-container">
