@@ -1,0 +1,28 @@
+{% extends "ArjunVaas/paymenttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+        body {
+            background-color: #ffffff !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+	<main>
+		<div class="container">
+			<!-- Third row -->
+			<div class="row d-flex flex-column justify-content-center align-items-center" >
+				<img src="{% static 'ArjunVaas/img/profile_icons/Payment Image.png' %}" style="height: 400px;" alt="" class="account-renewal-image mx-auto" />
+				<!--<label for="" class="text-center mb-5">Hrithik's Account Renewal: 11 March 2023</label>-->
+				<form method="post" action="/renew-profile">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">BUY NOW</button>
+                </form>
+			</div>
+		</div>
+	</main>
+
+{% endblock %}

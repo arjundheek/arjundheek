@@ -1,0 +1,222 @@
+{% extends "ArjunVaas/paymenttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #ffffff !important;
+        }
+        
+        .mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  will-change: transform;
+  transform: translateZ(0);
+  display: flex;
+  height: 60px;
+  box-shadow: 0 -2px 5px -2px #333;
+  background-color: #272424;
+}
+.mobile-bottom-nav__item {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* .mobile-bottom-nav__item--active {
+  color: red;
+} */
+.mobile-bottom-nav__item-content {
+  display: flex;
+  flex-direction: column;
+}
+h5.gghg {
+    font-size: 13px;
+}
+a.mobile-bottom-nav__item-content {
+    color: #f7ecec;
+}
+footer {
+    position: sticky !important;
+}
+.IcnFooter {
+    font-size: 22px;
+    margin-top: 12px;
+}
+/* img.header-image {
+    display: none;
+}
+footer span {
+    display: none;
+    font-size: 0.8rem;
+} */
+img.header-image {
+    position: fixed;
+    right: 0;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px !important;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #fff;
+    left: 41%;
+    padding: 9px;
+    /* height: 65px; */
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
+    /* width: 65px !important; */
+    bottom: 5px;
+    left: 50%;
+    margin: 0 !important;
+    /* width: 23px; */
+}
+footer span {
+    font-size: 0.8rem;
+    display: none;
+}
+footer{
+    position: sticky !important;
+    margin-bottom:20px;
+}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main style="margin-top: 3%">
+        <div class="btn_container" style="text-align: center; padding-bottom: 5%;">
+            <form method="post" action="create-new-profile">
+                {% csrf_token %}
+                <div class="vertical-center" style="text-align: center;">
+                    <button class="btn btn-success" style="text-align: center">+ Create new profile</button>
+                </div>
+            </form>
+        </div>
+        <div class="container">
+            <div class="user-cards">
+                {% for profile in profiles %}
+                    <div class="user-card">
+                        <div class="img-with-text">
+                            <img src="/{{ profile.picture }}" style="height: 100px;" alt=""
+                                 class="user-card__img">
+
+                        </div>
+                        <div class="user-card__body">
+                            <h3 class="user-card__title">{{ profile.name }}</h3>
+                            <p class="user-card__text mb-1">Gender: {{ profile.gender }}</p>
+                            <p class="user-card__text mb-1">
+                                Age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ profile.age }}</p>
+                            <p class="user-card__text mb-1">Height&nbsp;&nbsp;: {{ profile.height }}</p>
+                            <p class="user-card__text mb-1">
+                                Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ profile.size }}</p>
+                        </div>
+                        <div class="user-card__body">
+                            <div style="display: flex">
+                                <form method="post" action="edit-profile">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark mr-2" style="width: 75px">Edit</button>
+                                    <input type="text" name="edit-profile" value="{{ profile.id }}" hidden>
+                                </form>
+                                <form id="delete-profile-{{ profile.id }}" method="post" action="delete-profile" style="margin-left: auto;">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-danger" onclick="delete_profile({{ profile.id }})">Delete</button>
+                                    <input type="text" name="delete-profile" value="{{ profile.id }}" hidden>
+                                </form>
+                            </div>
+                            <div style="width: 100%; text-align: center;">
+                                <form  style="margin-top: 5%;" method="post" action="select-profile" class="user-card-form">
+                                    {% csrf_token %}
+                                    {% if profile.active %}
+                                        <button style="width: 100%"  type="submit" class="btn btn-primary"
+                                                style="width: 75px">Select profile
+                                    {% else %}
+                                        <button style="width: 100%" type="submit" class="btn btn-primary"
+                                                style="width: 75px" disabled>Select profile
+                                    {% endif %}
+                                    </button>
+                                    <input type="text" name="select-profile" value="{{ profile.id }}" hidden>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                {% endfor %}
+            </div>
+            
+        </div>
+        <footer>
+    
+            <nav class="mobile-bottom-nav">
+                <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                     <a href="/" class="mobile-bottom-nav__item-content">
+                        <i class="fa-solid fa-house IcnFooter"></i>
+                           <h5 class="gghg">Home</h5>
+                     </a>		
+                </div>
+              
+               <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                <a href="/tryons" class="mobile-bottom-nav__item-content">
+                   <i class="fa fa-heart IcnFooter"></i>
+                      <h5 class="gghg">Wish List</h5>
+                </a>		
+           </div>
+                
+             
+            </nav>
+        </footer>
+  
+    </main>
+
+{% endblock %}
+
+{% block footerscripts %}
+
+    <script>
+        function delete_profile(id) {
+            jQuery.getScript('https://cdn.jsdelivr.net/npm/sweetalert2@11', function () {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your profile has been deleted.',
+                            'success'
+                        )
+
+                        document.getElementById("delete-profile-"+id).submit();
+                    }
+                })
+
+            })
+        }
+        function removeItemAsync(item) {
+    return new Promise((resolve) => {
+        localStorage.removeItem(item);
+        resolve();
+    });
+}
+        let profiles = document.getElementsByClassName("user-card-form");
+        for (let i = 0; i < profiles.length; i++) {
+            profiles[i].addEventListener('submit', async function (e) {
+                // prevent the form from submitting
+                e.preventDefault();
+                console.log("hi")
+                await removeItemAsync("categoryId")
+                this.submit();
+            });
+        }
+    </script>
+{% endblock %}

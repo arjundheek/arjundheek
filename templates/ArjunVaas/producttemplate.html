@@ -1,0 +1,344 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <!-- Fontawesome -->
+    <script src="https://kit.fontawesome.com/8dd7d264aa.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- custom style -->
+    <link rel="stylesheet" href="{% static 'ArjunVaas/style.css' %}">
+    <title>Japan studio</title>
+    {% block headerscripts %}
+
+    {% endblock %}
+    <style>
+        body {
+            height: auto;
+            overflow: auto;
+
+            background-color: #fef9f5;
+        }
+
+        #nav-btn {
+            background-color: #e6eaed;
+            border: none;
+            color: black;
+        }
+
+        .reg-btn {
+            width: 30%;
+            margin-left: 10%;
+            font-size: 15px;
+        }
+
+        /* The sidebar menu */
+        .sidebar {
+            height: 100%; /* 100% Full-height */
+            width: 0; /* 0 width - change this with JavaScript */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            top: 0;
+            left: 0;
+            background-color: #e2e2e2; /* Black*/
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 60px; /* Place content 60px from the top */
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+        }
+
+        /* The sidebar links */
+        .sidebar a {
+            padding: 8px 8px 8px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Position and style the close button (top right corner) */
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* The button used to open the sidebar */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s; /* If you want a transition effect */
+            padding: 20px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidebar {
+                padding-top: 15px;
+            }
+
+            .sidebar a {
+                font-size: 18px;
+            }
+        }
+
+        .hr-1 {
+            border: 0; /* in order to override TWBS stylesheet */
+            height: 1px;
+
+            background: -moz-linear-gradient(left, rgba(196, 222, 138, 1) 0%, rgba(196, 222, 138, 1) 12.5%, rgba(245, 253, 212, 1) 12.5%, rgba(245, 253, 212, 1) 25%, rgba(255, 208, 132, 1) 25%, rgba(255, 208, 132, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 100%); /* FF3.6+ */
+            background: -webkit-linear-gradient(left, rgba(196, 222, 138, 1) 0%, rgba(196, 222, 138, 1) 12.5%, rgba(245, 253, 212, 1) 12.5%, rgba(245, 253, 212, 1) 25%, rgba(255, 208, 132, 1) 25%, rgba(255, 208, 132, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, rgba(196, 222, 138, 1) 0%, rgba(196, 222, 138, 1) 12.5%, rgba(245, 253, 212, 1) 12.5%, rgba(245, 253, 212, 1) 25%, rgba(255, 208, 132, 1) 25%, rgba(255, 208, 132, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left, rgba(196, 222, 138, 1) 0%, rgba(196, 222, 138, 1) 12.5%, rgba(245, 253, 212, 1) 12.5%, rgba(245, 253, 212, 1) 25%, rgba(255, 208, 132, 1) 25%, rgba(255, 208, 132, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 100%); /* IE10+ */
+            background: linear-gradient(to right, rgba(196, 222, 138, 1) 0%, rgba(196, 222, 138, 1) 12.5%, rgba(245, 253, 212, 1) 12.5%, rgba(245, 253, 212, 1) 25%, rgba(255, 208, 132, 1) 25%, rgba(255, 208, 132, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(94, 190, 227, 1) 100%); /* W3C */
+        }
+
+        .hr-2 {
+            border: 0; /* in order to override TWBS stylesheet */
+            height: 1px;
+
+            background: -moz-linear-gradient(left, rgba(223, 157, 185, 1) 0%, rgb(171, 187, 171) 12.5%, rgb(66, 194, 38) 12.5%, rgb(229, 94, 150) 25%, rgba(140, 230, 118, 11) 25%, rgba(94, 190, 227, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(242, 122, 107, 1) 87.5%, rgba(242, 122, 107, 1) 100%); /* FF3.6+ */
+            background: -webkit-linear-gradient(left, rgba(223, 157, 185, 1) 0%, rgb(171, 187, 171) 12.5%, rgb(66, 194, 38) 12.5%, rgb(229, 94, 150) 25%, rgba(140, 230, 118, 11) 25%, rgba(94, 190, 227, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(242, 122, 107, 1) 87.5%, rgba(242, 122, 107, 1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, rgba(223, 157, 185, 1) 0%, rgb(171, 187, 171) 12.5%, rgb(66, 194, 38) 12.5%, rgb(229, 94, 150) 25%, rgba(140, 230, 118, 11) 25%, rgba(94, 190, 227, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(242, 122, 107, 1) 87.5%, rgba(242, 122, 107, 1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left, rgba(223, 157, 185, 1) 0%, rgb(171, 187, 171) 12.5%, rgb(66, 194, 38) 12.5%, rgb(229, 94, 150) 25%, rgba(140, 230, 118, 11) 25%, rgba(94, 190, 227, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(242, 122, 107, 1) 87.5%, rgba(242, 122, 107, 1) 100%); /* IE10+ */
+            background: linear-gradient(to right, rgba(223, 157, 185, 1) 0%, rgb(171, 187, 171) 12.5%, rgb(66, 194, 38) 12.5%, rgb(229, 94, 150) 25%, rgba(140, 230, 118, 11) 25%, rgba(94, 190, 227, 1) 37.5%, rgba(242, 122, 107, 1) 37.5%, rgba(242, 122, 107, 1) 50%, rgba(223, 157, 185, 1) 50%, rgba(223, 157, 185, 1) 62.5%, rgba(192, 156, 221, 1) 62.5%, rgba(192, 156, 221, 1) 75%, rgba(95, 156, 217, 1) 75%, rgba(95, 156, 217, 1) 87.5%, rgba(94, 190, 227, 1) 87.5%, rgba(242, 122, 107, 1) 87.5%, rgba(242, 122, 107, 1) 100%); /* W3C */
+        }
+
+        footer {
+            /* position: fixed; */
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column">
+
+<header class="base-header">
+    <!-- Toggler -->
+    <!-- <button data-mdb-toggle="sidenav" data-mdb-target="#sidenav-1" class="btn btn-primary"
+            aria-controls="#sidenav-1" aria-haspopup="true" onclick="openNav()" id="nav-btn"
+            style="padding-top: 5%; padding-left: 5%; background-color: #E6EAEDFF;">
+        <i class="fas fa-bars"></i>
+    </button> -->
+    <!-- <div style="float: right; padding-top: 4%; width: 80%;">
+        <a href="/">
+            <img class="header-image" src="{% static 'ArjunVaas/img/new_home_icons/home.png' %}" style="width: 32px;float: left;padding: 2%;margin-right: 15%;">
+        </a>
+        <a href="#">
+            <img class="header-image" src="{% static 'ArjunVaas/img/new_home_icons/bell.png' %}" style="width: 32px;float: left;padding: 2%;margin-right: 15%;">
+        </a>
+        <a href="/tryons">
+            <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="width: 32px;float: left;padding: 2%;margin-right: 15%;">
+        </a>
+        <a href="#">
+            <img class="header-image" src="{% static 'ArjunVaas/img/new_home_icons/conversation.png' %}" style="width: 32px;float: left;padding: 2%;">
+        </a>
+    </div> -->
+</header>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <img src="{% static 'ArjunVaas/img/menu_icons/logo.png' %}"
+         style="width: 150px; display: block; margin-left: auto; margin-right: auto;">
+    <img src="{% static 'ArjunVaas/img/menu_icons/MenuImage.png' %}" style="height: 250px;">
+    <a href="/user-info" style="float: left; margin-left: 0; padding-left: 0;"><img
+            src="{% static 'ArjunVaas/img/menu_icons/shop_now.png' %}" style="float: left; width: 50%;"></a>
+    <!--
+    <a href="delete">Account delete</a>
+    <a href="renewal">Account renewal</a>
+    <a href="brands">Brands</a>
+    <a href="category">Category</a>
+    <a href="home">Home</a>
+    <a href="products">Products</a>
+    <a href="slider1">Slider1</a>
+    <a href="slider2">Slider2</a>
+    <a href="user-info">User info</a>
+    <a href="user-profile">User profile</a>
+    <a href="user-profile-edit">User profile edit</a>
+    -->
+    <a href="#">
+        <form method="post" action="/create-new-profile">
+        {% csrf_token %}
+            <button type="submit" style="color: inherit; text-decoration: inherit; display: inherit; border: none; padding: 0; background-color: inherit">Add Photo</button>
+        </form>
+    </a>
+    <a href="/user-info">My Profile</a>
+    <a href="/renewal">Renewals</a>
+    <a id="share_btn" href="#" data-action="share/whatsapp/share">Share</a>
+    <a href="/delete">Delete Account</a>
+    <hr style="border-color: white;">
+    <div style="margin-bottom: 5%;">
+        {% if user.is_authenticated %}
+            <a href="/logout" style="padding: 0; display: inline;">
+                <button type="button" class="btn btn-danger reg-btn">Logout</button>
+            </a>
+        {% else %}
+            <a href="/register" style="padding: 0; display: inline;">
+                <button type="button" class="btn btn-danger reg-btn">Sign up</button>
+            </a>
+            <a href="/login" style="display: inline;">
+                <button type="button" class="btn btn-danger reg-btn">Login</button>
+            </a>
+        {% endif %}
+    </div>
+</div>
+<!-- End sidebar -->
+
+
+<main>
+    {% block content %}
+
+    {% endblock %}
+    <!-- <div style="flex: 33.33%;position: fixed;right: 0.5rem;bottom: 4rem;"><a href="/tryons">
+        <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="margin-right: auto; margin-left: auto; width: 2.8rem;">
+        <span style="color: black;">Wish</span>
+    </a></div> -->
+</main>
+
+<footer style="background-color: white;">
+    <!-- <div class="d-flex mt-3" style="width: 100%;justify-content: space-around;background-color: #fff;padding-top: 0.5rem ;">
+        <a href="/tryons">
+            <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="width: 20px;float: left;padding: 2%;margin-right: 15%;">
+            <span style="color: black;">Wish</span>
+        </a>
+        <a href="/user-info">
+            <img class="header-image {% if request.path == '/tryons' %} active {% endif %}"
+                 src=" {% if profile_picture != null %} /{{ profile_picture }}  {%  else %} {% static 'ArjunVaas/img/new_home_icons/profile.png' %} {% endif %} "
+                 style="width: 20px;float: left;padding: 2%;margin-right: 15%;{% if profile_picture != null %} border-radius: 50%; {% endif %}">
+            <span style="color: black;">Profile</span>
+        </a> -->
+        <!-- <a style="display: flex;flex-direction: column;" href="https://tawk.to/chat/642408b331ebfa0fe7f54f09/1gsmc3vv4">
+            <img class="header-image" src="{% static 'ArjunVaas/img/new_home_icons/conversation.png' %}" style="width: 20px;float: left;padding: 2%;">
+            <span style="color: black;">Chat</span>
+        </a> -->
+    <!-- </div> -->
+    {% comment %} <div style="vertical-align: top;width:98%;display: inline-block;text-align: center; padding-bottom: 5px;" class="d-flex align-items-center">
+        {% if product.url %}
+            <a href="{{ product.url }}" target="_blank" class="btn btn-outline-dark btn-block mr-2">
+        {% else %}
+            <a href="#" class="btn btn-outline-dark btn-block mr-2">
+        {% endif %}
+        <i class="fa-regular fa-heart mr-2" style="color: #222"></i>
+        <b>Buy Now</b>
+        </a>
+        <a href="#" class="btn btn-danger btn-block mt-0" data-toggle="modal" data-target="#exampleModal">Try
+            On</a>
+    </div> {% endcomment %}
+    <!--
+    <div style="vertical-align: top;display: inline-block;text-align: center; padding-bottom: 5px;">
+        <img src="{% static 'ArjunVaas/img/home_icons/chat.png' %}" width="50px">
+        <span style="font-size: 12px; color: #ff3030; display: block;">Chat?</span>
+    </div>-->
+
+    <div class="row" style="width: 100%;margin: 0">
+        <!-- <div class="col" style="flex: 33.33%"><a href="/tryons">
+                <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="margin-right: auto; margin-left: auto; width: 20%">
+                <span style="color: black;">Wish</span>
+            </a></div> -->
+        <div class="col" style="flex: 33.33%"><a href="/user-info" class="d-flex flex-column">
+                <img class="header-image {% if request.path == '/' %} active {% endif %}"
+                     src=" {% if profile_picture != null %} /{{ profile_picture }}  {%  else %} {% static 'ArjunVaas/img/new_home_icons/profile.png' %} {% endif %} "
+                     style="margin-right: auto; margin-left: auto; width: 20%;max-width: 20%;">
+                <span style="color: black;align-self: center;">Profile</span>
+            </a></div>
+        <!-- <div class="col" style="flex: 33.33%"> <a style="display: flex;flex-direction: column;" href="https://tawk.to/chat/642408b331ebfa0fe7f54f09/1gsmc3vv4">
+                <img class="header-image" src="{% static 'ArjunVaas/img/new_home_icons/conversation.png' %}" style="margin-right: auto; margin-left: auto; width: 20%">
+                <span style="color: black;">Chat</span>
+            </a></div> -->
+    
+    
+        </div>
+
+</footer>
+
+</body>
+
+<script>
+    window.onload = function(){
+        let width = window.screen.availWidth
+        let height = window.screen.availHeight
+        if(height>1200 || width>820){
+            document.body.innerHTML = '<p class="d-flex align-items-center justify-content-center">This page is visible only on mobile devices</p>'
+'<p>We support only mobile devices</p>'
+        }
+    }
+    document.getElementById('share_btn').href = "whatsapp://send?text=We always want to deliver real fun for users. We blended art and tech with forward thinking. We don’t just keep up with technology. We embrace it, live it and breathe it. " + window.location
+
+    document.querySelectorAll('.header-image').forEach(i => {
+        i.addEventListener('click', function(){
+            debugger
+            let activeImage = document.querySelector('.header-image.active')
+            if(activeImage)
+            activeImage.classList.remove('active')
+            i.classList.add('active')
+        })
+    })
+
+    $(document).on('contextmenu', function (e) {
+        // stop long touch hold from poping up context menus
+        return false;
+    });
+
+    /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+</script>
+
+{% block footerscripts %}
+
+{% endblock %}
+
+</html>

@@ -1,0 +1,73 @@
+{% extends "ArjunVaas/main.html" %}
+{% load static %}
+{% block content %}
+    <div class="showcase">
+        
+
+        <div class="container">
+            <!-- <h1 class="font-weight-bold text-capitalize mb-2" style="font-size: 200%">The largest 🔥<br> virtual fashion
+                <br>company
+                <button class="btn badge-pill btn-danger | py-1 px-3">
+                    World-Class <br> Experience
+                </button>
+            </h1> -->
+            <!-- <p class="w-85" style="font-size: 70%; width: 70%; color: lightslategrey">
+                Our growth, signature look and innovation has earned us a place in so many people's
+                hearts.
+            </p> -->
+        </div>
+    </div>
+    <div class="main-content" style="background-color: #fff;">
+        <div>
+            <img src="{% static 'ArjunVaas/img/index.jpg' %}" alt="" >
+        </div>
+        <!-- <div class="container">
+            <div class="d-flex align-items-center" style="color: #6b6e71">
+                <a href="https://www.youtube.com/@TycoonPeopleGroup" target="_blank" style="color: inherit; text-decoration: inherit; display: inherit">
+                    <img src="{% static 'ArjunVaas/img/home_icons/our-journey.png' %}" alt="" class="icon | mr-2">
+                    <span style="margin-top: 10%;">Our Journey</span>
+                </a>
+            </div>
+            <img src="{% static 'ArjunVaas/img/home_page_icons/peoples.png' %}" alt="" class="peoples-img | mx-auto">
+            <img src="{% static 'ArjunVaas/img/home_icons/tecnhnologies.png' %}" alt="" class="technologies-img">
+        </div> -->
+        <!-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel"  style="margin: 10% 10% 10% 10%;padding: 0!important;">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100"
+                         src="{% static 'ArjunVaas/img/banners/Home Banner 1.jpg' %}"
+                         style="width: 100%" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100"
+                         src="{% static 'ArjunVaas/img/banners/home_banner_2.jpg' %}"
+                         style="width: 100%" alt="">
+                </div>
+            </div>
+            <ol class="carousel-indicators" style="margin-top: 5%; z-index: -1">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="carousel-indicator bg-dark active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1" class="carousel-indicator bg-dark"></li>
+            </ol>
+        </div> -->
+        <!-- <div style="display: flex;justify-content: center;gap:2rem;">
+            <a style="color:black;text-decoration: none;font-family:Roboto;" href="{% static '/uploads/docs/about_us.pdf' %}">About</a>
+            <a style="color:black;text-decoration: none;font-family:Roboto;" href="{% static '/uploads/docs/terms.pdf' %}">Terms</a>
+            <a style="color:black;text-decoration: none;font-family:Roboto;" href="{% static '/uploads/docs/policy.pdf' %}">Policy</a>
+            <a style="color:black;text-decoration: none;font-family:Roboto;" href="{% static '/uploads/docs/contact.pdf' %}">Contact</a>
+        </div> -->
+        <div class="d-flex" style="width: 100%;justify-content: space-around;">
+            <!-- <a href="/tryons">
+                <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="width: 32px;float: left;padding: 2%;margin-right: 15%;">
+                <span style="color: black;">Wish</span>
+            </a> -->
+            <a href="/user-info">
+                <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/profile.png' %}" style="width: 32px;float: left;padding: 2%;margin:0 15% 0 8%;">
+                <span style="color: black;">Profile</span>
+            </a>
+            <!-- <a style="display: flex;flex-direction: column;" href="https://tawk.to/chat/642408b331ebfa0fe7f54f09/1gsmc3vv4">
+                <img class="header-image" src="{% static 'ArjunVaas/img/new_home_icons/conversation.png' %}" style="width: 32px;float: left;padding: 2%;">
+                <span style="color: black;">Chat</span>
+            </a> -->
+        </div>
+    </div>
+{% endblock %}

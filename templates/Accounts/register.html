@@ -1,0 +1,42 @@
+{% extends "Accounts/main.html" %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+    <!--Register-->
+    <div class="container py-5">
+        <h2>Register</h2>
+        <div class="error">
+            <b style="color:red;">No space is allowed in username</b>
+        </div>
+        <form method="POST" onsubmit=ValidateRegister(e)>
+            {% csrf_token %}
+            {{ register_form }}
+            <p>By continuing, I agree to the <span style="color: deeppink">Terms of Use</span> & <span style="color: deeppink">Privacy Policy</span></p>
+            <button class="btn btn-primary" style="width: 100%; height: 50px; background-color: deeppink" type="submit">Register</button>
+        </form>
+        <br>
+        <p class="text-center">
+            <b style="color:red;">No space is allowed in username</b>
+            {% comment %} If you already have an account, <a href="/login">login</a> instead. {% endcomment %}
+        </p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('#id_username').append('<span>No space is allowed<span>')
+          });
+        
+        
+        document.getElementById('hint_id_username').hidden = true
+        //document.querySelector('button[type=submit]').addEventListener('submit')
+        function ValidateRegister(e){
+            debugger
+            let username = document.querySelector('#id_username')
+            if(username && username.value.includes(' ')){
+                document.querySelector('.error').innerHTML = '<p>Spaces are not allowed in username</p>'
+                e.preventDefault()
+            }
+        }
+    </script>
+
+{% endblock %}

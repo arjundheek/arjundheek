@@ -1,0 +1,47 @@
+{% extends "ArjunVaas/paymenttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+        #nav-btn {
+            background-color: #fef9f5 !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+	<main>
+		<div class="mb-5 container">
+			<h3 class="font-weight-bold">Here & Now</h3>
+			<a href="javascript:history.back()"><i class="fa-sharp fa-solid fa-arrow-left ml-3 my-3" style="color: #222;"></i></a>
+			<div id="carouselExampleIndicators" class="carousel slide indicators | mb-5" data-ride="carousel">
+				<div class="carousel-inner my-slider">
+					<div class="carousel-item active indicators">
+						<img class="d-block w-100" src="{% static 'ArjunVaas/img/brand_icons/8.jpg' %}" alt="First slide">
+					</div>
+					<div class="carousel-item indicators">
+						<img class="d-block w-100" src="{% static 'ArjunVaas/img/brand_icons/9.jpg' %}" alt="Second slide">
+					</div>
+					<div class="carousel-item indicators">
+						<img class="d-block w-100" src="{% static 'ArjunVaas/img/brand_icons/10.jpg' %}" alt="Third slide">
+					</div>
+				</div>
+				<ol class="carousel-indicators">
+					<li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark" data-slide-to="0"
+						class="active">
+					</li>
+					<li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark" data-slide-to="1">
+					</li>
+					<li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark" data-slide-to="2">
+					</li>
+				</ol>
+			</div>
+			<div class="d-flex justify-content-around">
+				<a href="" class="btn btn-danger">Save Try On</a>
+			</div>
+
+		</div>
+	</main>
+
+{% endblock %}

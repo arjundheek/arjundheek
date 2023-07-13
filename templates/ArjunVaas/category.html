@@ -1,0 +1,439 @@
+{% extends "ArjunVaas/paymenttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+
+        body {
+            background-color: #FEF9FFFF !important;
+        }
+
+        #nav-btn {
+            background-color: #FEF9FFFF !important;
+        }
+
+        /* .img-wrapper {
+            position: relative;
+            width: 100%;
+            font-size: 0;
+        } */
+
+        /* .img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(128, 128, 128, 0.5);
+        } */
+
+        .img-wrapper img {
+            width: 100%;
+        }
+        .custom-header {
+  
+          height: 10%;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          transition: top 0.2s ease-in-out;
+          width: 100%;
+          z-index: 999;
+      }
+
+
+      .nav-up {
+          top: -30%;
+      }
+      .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    will-change: transform;
+    transform: translateZ(0);
+    display: flex;
+    height: 50px;
+    box-shadow: 0 0px 70px 0px #c8acf5;
+    background-color: #272424;
+  }
+  .mobile-bottom-nav__item {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  /* .mobile-bottom-nav__item--active {
+    color: red;
+  } */
+  .mobile-bottom-nav__item-content {
+    display: flex;
+    flex-direction: column;
+  }
+  h5.gghg {
+      font-size: 13px;
+  }
+  a.mobile-bottom-nav__item-content {
+      color: #f7ecec;
+  }
+  .IcnFooter {
+      font-size: 22px;
+      margin-top: 12px;
+  }
+  img.header-image {
+    position: fixed;
+    right: 0;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px !important;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #fff;
+    left: 41%;
+    padding: 9px;
+    /* height: 65px; */
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
+    /* width: 65px !important; */
+    bottom: 5px;
+    left: 50%;
+    margin: 0 !important;
+    /* width: 23px; */
+}
+
+.product-filter-button {
+    position: fixed;
+    bottom: 0.9rem;
+    right: 1.5rem;
+}
+footer {
+    position: sticky !important;
+    margin-bottom: 0px;
+}
+footer span {
+    font-size: 0.8rem;
+    display: none;
+}
+
+.try-icon {
+    background-image: url(/static/ArjunVaas/img/icons/latesttry.png);
+    height: 32px;
+    width: 60px;
+    top: 10px;
+    right: -59px;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-repeat: no-repeat;
+}
+/* img.header-image {
+    display: none !important;
+} */
+
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main style="margin-top: 30%;">
+        <div class="container">
+        <div class="custom-header">
+           <img src="/{{ logo }}" alt="" class="peoples-img | mx-auto" style="height: 3.5rem; object-fit: fill;width: 100%">
+            <!-- Third row -->
+            <div class="text-center" style="width: 100%; margin: auto">
+                <!--
+                <div style="margin-bottom: 5%;">
+                    <a href="javascript:history.back()"><i class="fa-sharp fa-solid fa-arrow-left ml-3 my-3"
+                                                           style="color: #222; float: left;"></i></a>
+                    <h5 style="padding-top: 3%;padding-left: 15%;" class="font-weight-bold">{{ brand_name }}</h5>
+                </div>
+            -->
+                <div class="categories">
+                    {% for category in categories %}
+                        {% if category.active == 1 %}
+                        {% if forloop.counter == 1 %}
+                            <div id="{{category.id}}" class="category active available-category">
+                        {% else %}
+                            <div id="{{category.id}}" class="category available-category">
+                        {% endif %}
+                            <!-- <a href="../products/{{ category.id }}"><img src="/{{ category.image }}" alt=""
+                                                                             class="category__img">
+                            <span>T-Shirts</span></a> -->
+                            <div id="{{category.id}}" class="category__img_container active">
+                                <img src="/{{ category.image }}" alt=""
+                                    class="category__img" /><span></span>
+                            </div>
+                            </div>
+                        {% else %}
+                            <div id="{{category.id}}" class="category unavailable" title="No products available for this category at the moment...">
+                                <!-- <div class="img-wrapper"> -->
+                                    <!-- <div class="img-overlay"></div> -->
+                                    <a style="display: flex;" href="#"><img src="/{{ category.image }}" alt=""
+                                                     class="category__img"></a>
+                                <!-- </div> -->
+                                    </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+            {% include "ArjunVaas/products.html" %}
+            <script type="text/javascript">
+                let counter = 0
+                let main_image = ''
+                let product_name = ''
+                let product_price = ''
+                let product_url = ''
+                let product_color = ''
+                let product_type = ''
+                
+                function fetchProducts(categoryId){
+                    fetch(`/products/json/${categoryId}`)
+                        .then(response => response.json())
+                        .then((response) => {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            let colors_query = urlParams.get('colors');
+                            colors_query = colors_query && colors_query.split("'").join('"')
+                            {#colors_query = JSON.parse(colors_query)#}
+                            let types_query = urlParams.get('types');
+                            types_query = types_query && types_query.split("'").join('"')
+                            {#types_query = JSON.parse(types_query)#}
+
+                          let products = response.data
+                            document.querySelector('.products').innerHTML = ''
+                            for(index in products){
+                                let product = products[index]
+                                main_image = product.main_image
+                                product_name = product.name
+                                product_price = parseInt(product.price)
+                                product_url = product.url
+                                counter = Number(index) + 1
+                              product_color = product.color
+                              product_type = product.type
+                              {#console.log(colors_query)#}
+                              {#console.log(types_query)#}
+                              {#console.log(product_color)#}
+                              {#console.log(product_type)#}
+                              if (colors_query !== null && colors_query.trim() !== "" && colors_query !== "[]" && !colors_query.includes(product_color)){
+                                console.log('continue')
+                                continue
+                              }
+                              if (types_query !== null && types_query.trim() !== "" && types_query !== "[]" && !types_query.includes(product_type)){
+                                console.log('continue')
+                                continue
+                              }
+                                let productCard = `<div class="product-card">
+                    <section id="carousel" class="carousel slide" aria-label="Gallery">
+                            <ol class="carousel__viewport">
+                                <li id="main_image_${counter}"
+                                    tabindex="0"
+                                    class="carousel__slide">
+                                    <div class="carousel__snapper">
+                                        <img class="product__card-image" src=${main_image} alt="Card image cap">
+                                    </div>`
+                                    if(product.is_try_on_main_image_enabled)
+                                        productCard += `<a class="try-button" href="/product/${product.id}?img=main_image" class="">
+                                        <i class="try-icon"></i></a></li>`
+
+
+                                if(product.image_1){
+                                    productCard +=`<li id="image_1_${counter}"
+                                    tabindex="0"
+                                    class="carousel__slide">
+                                    <div class="carousel__snapper">
+                                        <img class="product__card-image" src="${product.image_1}" alt="Card image cap" />
+                                    </div>`
+                                    if(product.is_try_on_image1_enabled)
+                                   productCard += `<a class="try-button" href="/product/${product.id}?img=image1">
+                                            <i class="try-icon"></i></a></li>`
+                                }
+
+                                if(product.image_2){
+                                    productCard +=`<li id="main_image_${counter}"
+                                    tabindex="0"
+                                    class="carousel__slide">
+                                    <div class="carousel__snapper">
+                                        <img class="product__card-image" src="${product.image_2}" alt="Card image cap" />
+                                    </div>`
+                                    if(product.is_try_on_image2_enabled)
+                                   productCard += `<a class="try-button" href="/product/${product.id}?img=image2">
+                                            <i class="try-icon"></i></a></li>`
+                                }
+                                productCard += `</section>
+                            <div class="carousel__navigation">
+                              <ol class="carousel__navigation-list">
+                                <li class="carousel__navigation-item">
+                                  <a href="#main_image_${counter}"
+                                     class="carousel__navigation-button"></a>
+                                </li>`
+                                if(product.image_1){
+                                    productCard += `
+                                <li class="carousel__navigation-item">
+                                  <a href="#image_1_${counter}"
+                                     class="carousel__navigation-button"></a>
+                                </li>`
+                                }
+
+                                if(product.image_2){
+                                    productCard += `<li class="carousel__navigation-item">
+                                  <a href="#image_2_${counter}"
+                                     class="carousel__navigation-button"></a>
+                                </li>`
+                                }
+                                productCard +=`</div>
+<div style="padding: 0; text-align: center">
+                            <span class="product-name">${product_name}</span>
+                          <div class="product-action">
+<div class='row' style="width: 100%; margin: -5% 0 0; text-align: left">
+  <div class='col' style="padding: 0;flex: 40%">
+    <div>
+      <img src="/static/ArjunVaas/img/icons/rupee.png" style="display: inline; vertical-align:middle; margin-right: -8%; margin-left:13%; margin-top: -1%; width: 16%"/>
+      <span style="font-size: 0.9rem">${product_price}</span>
+    </div>
+  </div>`
+ //if(product.try_on_image1 !== null || product.try_on_main_image !== null){
+                                    //productCard += `
+  //<div class='col' style="padding: 0;flex: 30%">
+    //<a href="/product/${product.id}?img=image1" class="product-action-text" style="border-bottom: 2px solid red">
+    //  Try
+    //</a>
+  //</div>`}
+
+  productCard += `<div class='col' style="padding: 0;flex: 30%">
+    <a href=${product_url} class="product-action-text">
+      Buy Now
+    </a>
+  </div>
+</div>
+
+                          </div>
+                        </div>
+                    </div>`
+                      {#document.querySelector('.products').innerHTML = ''#}
+                        document.querySelector('.products').innerHTML += productCard
+
+                            }
+                            //productCard = !productCard ? '' : productCard[0].innerHTML
+
+                        })
+                }
+                const categories = document.querySelectorAll('.available-category')                
+                categories.forEach(category => {
+                    let categoryId = category.id
+                    //let productUrl = `products/json/`
+                    category.addEventListener('click', function(e){
+                        localStorage.setItem('categoryId', categoryId)
+                        q = document.querySelector('.category.active')
+                        if (!this.classList.contains('active')) {
+                          q.classList.remove('active')
+                          this.classList.add('active')
+                          window.location.href = window.location.href.split('?')[0]
+                        }
+
+                    })  
+                })
+                const navigation_button = document.querySelectorAll('.carousel__navigation-item')
+                navigation_button.forEach(button => {
+                    button.addEventListener('click', function(){                        
+                        button.parentElement.parentElement.querySelector('.carousel__navigation-item.active').classList.remove('active')
+                        button.classList.add('active')
+                    })
+                })
+                $(document).ready(async function () {
+                    var lastTab = localStorage.getItem('categoryId');
+                    const categories = document.querySelectorAll('.available-category')
+                    if (lastTab !== null) {
+                      await fetchProducts(lastTab);
+                    } else {
+                      localStorage.setItem('categoryId', categories[0].id)
+                    }
+                    for (let i = 0; i < categories.length; i++) {
+                      if (lastTab === null) {
+                        categories[0].classList.add('active')
+                        break
+                      }
+                      if (categories[i].id === lastTab) {
+                        categories[i].classList.add('active')
+
+                      } else {
+                        categories[i].classList.remove('active')
+                      }
+                    }
+                  }
+                )
+            
+            </script>
+{#        <script>#}
+{#          var didScroll;#}
+{#          var lastScrollTop = 0;#}
+{#          var delta = 1;#}
+{#          var navbarHeight = $('.custom-header').outerHeight();#}
+{##}
+{#          $(window).scroll(function(event){#}
+{#              didScroll = true;#}
+{#          });#}
+{##}
+{#          setInterval(function() {#}
+{#              if (didScroll) {#}
+{#                  hasScrolled();#}
+{#                  didScroll = false;#}
+{#              }#}
+{#          }, 250);#}
+{##}
+{#          function hasScrolled() {#}
+{#              var st = $(this).scrollTop();#}
+{##}
+{#              // Make sure they scroll more than delta#}
+{#              if(Math.abs(lastScrollTop - st) <= delta)#}
+{#                  return;#}
+{##}
+{#              // If they scrolled down and are past the navbar, add class .nav-up.#}
+{#              // This is necessary so you never see what is "behind" the navbar.#}
+{#              if (st > lastScrollTop && st > navbarHeight){#}
+{#                  // Scroll Down#}
+{#                  $('.custom-header').removeClass('nav-down').addClass('nav-up');#}
+{#              } else {#}
+{#                  // Scroll Up#}
+{#                  if(st + $(window).height() < $(document).height()) {#}
+{#                      $('.custom-header').removeClass('nav-up').addClass('nav-down');#}
+{#                  }#}
+{#              }#}
+{##}
+{#              lastScrollTop = st;#}
+{#          }#}
+{#        </script>#}
+        <script >
+
+        </script>
+        </div>
+        </div>
+        <footer>
+    
+    <nav class="mobile-bottom-nav">
+        <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+             <a href="/" class="mobile-bottom-nav__item-content">
+                <i class="fa-solid fa-house IcnFooter"></i>
+                   <h5 class="gghg">Home</h5>
+             </a>		
+        </div>
+    
+       <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+        <a href="/tryons" class="mobile-bottom-nav__item-content">
+           <i class="fa fa-heart IcnFooter"></i>
+              <h5 class="gghg">Wish List</h5>
+        </a>		
+   </div>
+        
+     
+    </nav>
+</footer>
+    </main>
+
+{% endblock %}

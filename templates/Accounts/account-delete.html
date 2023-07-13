@@ -1,0 +1,68 @@
+{% extends "ArjunVaas/paymenttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #ffffff !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <!-- Third row -->
+            <div class="row d-flex flex-column justify-content-center align-items-center" style="margin-top: 20%">
+                <img src="{% static 'ArjunVaas/img/profile_icons/Delete account.jpg' %}" alt=""
+                     class="account-delete-image mx-auto"/>
+                <label for="" class="text-center mb-5">{{ user.get_username }}'s Account will be deleted
+                    permanently</label>
+                <form id="delete_account_form" action="/delete-user">
+                    <button type="submit" id="delete_account_btn" class="btn btn-danger">Delete Account</button>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block footerscripts %}
+
+    <script>
+        jQuery("#delete_account_form").on('submit', function (e) {
+
+            // some implementation
+            // Now showing the alert
+
+            e.preventDefault();
+
+            jQuery.getScript('https://cdn.jsdelivr.net/npm/sweetalert2@11', function () {
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your account has been deleted.',
+                            'success'
+                        )
+
+                        document.getElementById("delete_account_form").submit();
+                    }
+                })
+
+            })
+
+            // rest of the code
+        });
+    </script>
+
+{% endblock %}

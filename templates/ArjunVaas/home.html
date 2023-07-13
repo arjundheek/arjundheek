@@ -1,0 +1,403 @@
+{% extends "ArjunVaas/hometemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+        .cropper-container{
+            width: 100%;
+            height: 400px;
+        }
+        h5.tetExplm {
+    font-size: 16px;
+    text-align: center;
+}
+
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  will-change: transform;
+  transform: translateZ(0);
+  display: flex;
+  height: 50px;
+  box-shadow: 0 -2px 100px -2px #db9616;
+  background-color: #272424;
+}
+.mobile-bottom-nav__item {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* .mobile-bottom-nav__item--active {
+  color: red;
+} */
+.mobile-bottom-nav__item-content {
+  display: flex;
+  flex-direction: column;
+}
+h5.gghg {
+    font-size: 13px;
+}
+a.mobile-bottom-nav__item-content {
+    color: #f7ecec;
+}
+.IcnFooter {
+    font-size: 22px;
+    margin-top: 12px;
+}
+/* img.header-image {
+    display: none;
+}
+footer span {
+    display: none;
+    font-size: 0.8rem;
+} */
+img.header-image {
+    position: fixed;
+    right: 0;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px !important;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #fff;
+    left: 41%;
+    padding: 9px;
+    /* height: 65px; */
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
+    /* width: 65px !important; */
+    bottom: 5px;
+    left: 50%;
+    margin: 0 !important;
+    /* width: 23px; */
+}
+footer span {
+    font-size: 0.8rem;
+    display: none;
+}
+
+
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <!-- Third row -->
+            <div class="my-margin row mt-3 d-flex flex-column align-items-center justify-content-center">
+                <div class="col-12">
+                    <h3 class="text-center">
+                        Select your gender
+                    </h3>
+                    <form method="post" enctype="multipart/form-data" action="user-profile-edit">
+                        {% csrf_token %}
+                        <div class="mb-3 m-auto">
+                            <section class="my-section"
+                                     onchange="document.getElementById('form_data').style.display = 'block'">
+                                <input name="selected_gender" id="selected_gender" value="{{ selected_profile.gender }}" hidden/>
+                                <div class="input-group">
+                                    {% if selected_profile.gender == 'babyboy' %}
+                                        <input type="radio" name="gender" checked
+                                               onclick="selected_gender_update('babyboy');" id="babyBoy" value="babyBoy" class="genderRadioInput"/>
+                                    {% else %}
+                                        <input type="radio" name="gender" onclick="selected_gender_update('babyboy');"
+                                               id="babyBoy" value="babyBoy" class="genderRadioInput"/>
+                                    {% endif %}
+                                    <label for="babyBoy">
+                                        <figure>
+                                            <img src="{% static 'ArjunVaas/img/new_gender_icons/babyboy.png' %}" alt=""/>
+                                        </figure>
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    {% if selected_profile.gender == 'babygirl' %}
+                                    <input type="radio" name="gender" checked onclick="selected_gender_update('babygirl')"
+                                           id="babyGirl" value="babyGirl"
+                                           class="genderRadioInput"/>
+                                    {% else %}
+                                    <input type="radio" name="gender" onclick="selected_gender_update('babygirl')"
+                                           id="babyGirl" value="babyGirl"
+                                           class="genderRadioInput"/>
+                                    {% endif %}
+                                    <label for="babyGirl">
+                                        <figure>
+                                            <img src="{% static 'ArjunVaas/img/new_gender_icons/babygirl.png' %}"
+                                                 alt=""/>
+                                        </figure>
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    {% if selected_profile.gender == 'boy' %}
+                                    <input type="radio" name="gender" id="boy" checked onclick="selected_gender_update('boy')"
+                                           value="boy" class="genderRadioInput"/>
+                                    {% else %}
+                                    <input type="radio" name="gender" id="boy" onclick="selected_gender_update('boy')"
+                                           value="boy" class="genderRadioInput"/>
+                                    {% endif %}
+                                    <label for="boy">
+                                        <figure>
+                                            <img src="{% static 'ArjunVaas/img/new_gender_icons/boy_image.png' %}" alt=""/>
+                                        </figure>
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    {% if selected_profile.gender == 'girl' %}
+                                    <input type="radio" name="gender" id="girl" checked onclick="selected_gender_update('girl')"
+                                           value="girl" class="genderRadioInput"/>
+                                    {% else %}
+                                    <input type="radio" name="gender" id="girl" onclick="selected_gender_update('girl')"
+                                           value="girl" class="genderRadioInput"/>
+                                    {% endif %}
+                                    <label for="girl">
+                                        <figure>
+                                            <img src="{% static 'ArjunVaas/img/new_gender_icons/girl.png' %}" alt=""/>
+                                        </figure>
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    {% if selected_profile.gender == 'man' %}
+                                    <input type="radio" name="gender" id="man" checked onclick="selected_gender_update('man')"
+                                           value="man" class="genderRadioInput"/>
+                                    {% else %}
+                                    <input type="radio" name="gender" id="man" onclick="selected_gender_update('man')"
+                                           value="man" class="genderRadioInput"/>
+                                    {% endif %}
+                                    <label for="man">
+                                        <figure>
+                                            <img src="{% static 'ArjunVaas/img/new_gender_icons/man.png' %}" alt=""/>
+                                        </figure>
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    {% if selected_profile.gender == 'woman' %}
+                                    <input type="radio" name="gender" checked onclick="selected_gender_update('woman')"
+                                           id="woman" value="woman"
+                                           class="genderRadioInput"/>
+                                    {% else %}
+                                    <input type="radio" name="gender" onclick="selected_gender_update('woman')"
+                                           id="woman" value="woman"
+                                           class="genderRadioInput"/>
+                                    {% endif %}
+                                    <label for="woman">
+                                        <figure>
+                                            <img src="{% static 'ArjunVaas/img/new_gender_icons/women.png' %}" alt=""/>
+                                        </figure>
+                                    </label>
+                                </div>
+                            </section>
+                        </div>
+                        {% if selected_profile.gender %}
+                        <div id="form_data">
+                        {% else %}
+                        <div id="form_data" style="display: none">
+                        {% endif %}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" name="name" id="name" value="{{ selected_profile.name }}" maxlength="8" class="form-control" required/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                {% if selected_profile.age == 0 %}
+                                <input type="number" name="age" id="age" value="" maxlength="2" class="form-control" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required/>
+                                {% else %}
+                                <input type="number" name="age" id="age" value="{{ selected_profile.age }}" maxlength="2" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" class="form-control" required/>
+                                {% endif %}
+                            </div>
+
+                            {% comment %} <div class="mb-3" style="visibility:hidden;">
+                                <label for="phone" class="form-label">Phone</label>
+                                {% if selected_profile.phone == 0 %}
+                                <input type="tel" name="phone" id="phone" value="" minlength="10" maxlength="10"
+                                       class="form-control"
+                                       required/>
+                                {% else %}
+                                <input type="tel" name="phone" id="phone" value="{{ selected_profile.phone }}" minlength="10" maxlength="10"
+                                       class="form-control" />
+                                {% endif %}
+                            </div> {% endcomment %}
+
+                            <div class="mb-3">
+                                <div class="d-flex flex-column align-items-center justify-content-center"
+                                     style="text-align: center;">
+                                        {% if selected_profile.picture %}
+                                        <label for="image" class="uploadImageLabel" data-label="Change picture">
+                                        <img src="/{{ selected_profile.picture }}" alt=""
+                                             class="uploadImageIcon" onclick="open_modal()" name="image_img" id="image_img"/>
+                                        {% else %}
+                                        <label for="image" class="uploadImageLabel" data-label="Upload">
+                                        <img src="{% static 'ArjunVaas/img/gender_icons/Gallery (4).png' %}" alt=""
+                                             class="uploadImageIcon" onclick="open_modal()" name="image_img" id="image_img"/>
+                                        {% endif %}
+                                    </label>
+                                    <input type="file" id="image" name="image" class="form-control" accept="image/*"/>
+                                    <input type="text" id="image_url" name="image_url" class="form-control" hidden />
+                                </div>
+                            </div>
+
+                            {% if selected_profile.picture != '' %}
+                                <button type="submit"
+                                    class="btn btn-primary w-100 d-flex my-4 mx-auto justify-content-center badge-pill" id="sub_btn">
+                                Continue
+                                </button>
+                            {% else %}
+                                <button type="submit"
+                                    class="btn btn-primary w-100 d-flex my-4 mx-auto justify-content-center badge-pill" id="sub_btn" disabled>
+                                Continue
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="aksh">
+                            <a href="exmp.html" style="display: inline;">
+                                <h5 class="tetExplm"> See examples how to upload Images.</h5>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document" style="height: 100%; width: 100%; max-width: 100%; margin: 0; padding: 0;">
+            <div class="modal-content" style="height: auto; min-height: 100%; border-radius: 0;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crop face</h5>
+                    <button type="button" id="save-cropped-image" class="btn btn-primary" style="margin-left: 5%;width: 50%;">Save cropped image</button>
+                    <button type="button" class="close" onclick="location.reload()" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="image1">
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+    
+        <nav class="mobile-bottom-nav">
+            <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                 <a href="/" class="mobile-bottom-nav__item-content">
+                    <i class="fa-solid fa-house IcnFooter"></i>
+                       <h5 class="gghg">Home</h5>
+                 </a>		
+            </div>
+        
+           <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+            <a href="/tryons" class="mobile-bottom-nav__item-content">
+               <i class="fa fa-heart IcnFooter"></i>
+                  <h5 class="gghg">Wish List</h5>
+            </a>		
+       </div>
+            
+         
+        </nav>
+    </footer>
+
+{% endblock %}
+
+{% block footerscripts %}
+    <script src="{% static 'ArjunVaas/cropperjs-main/dist/cropper.js' %}"></script>
+    <script>
+        var image_uploaded = false
+
+        function check_disabled(){
+            var age = document.getElementById('age')
+            //var phone = document.getElementById('phone')  //phone removed from the form
+
+            //if (age.value !== "" && phone.value !== "" && image_uploaded) {
+            if (age.value !== "" && image_uploaded) {
+                document.getElementById('sub_btn').disabled = false
+                clearInterval(intervalId)
+            }
+
+        }
+
+        var intervalId = window.setInterval(function(){
+          check_disabled()
+        }, 3000);
+
+        // const form = document.querySelector('form')
+        // form.addEventListener('submit', (e)=>{
+        //   e.preventDefault();
+        //   // Way 1
+        //   console.log(form.gender.value);
+
+        //   // Way 2
+        //   const form_data = new FormData(form);
+        //   console.log(form_data.get('gender'));
+        // })
+
+        function selected_gender_update(val) {
+            document.getElementById('selected_gender').value = val;
+        }
+
+        const imageInput = document.getElementById('image');
+        const imageElement = document.querySelector('.uploadImageIcon');
+
+        const uploadImageLabel = document.querySelector('.uploadImageLabel');
+
+        function open_modal(){
+            $("#exampleModal").modal();
+        }
+
+        imageInput.addEventListener('input', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener('load', (e) => {
+                var image = document.getElementById('image1');
+                image.src = e.target.result;
+
+                var image = document.getElementById('image1');
+                var cropper = new Cropper(image, {
+                    dragMode: 'crop',
+                    autoCropArea: 0.5,
+                    restore: false,
+                    guides: true,
+                    center: false,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                    ready: function () {
+                        croppable = true;
+                    },
+                });
+
+                document.getElementById('save-cropped-image').onclick = function () {
+                    var croppedCanvas;
+                    var roundedCanvas;
+                    var roundedImage;
+
+                    if (!croppable) {
+                        return;
+                    }
+
+                    // Crop
+                    croppedCanvas = cropper.getCroppedCanvas();
+                    uploadImageLabel.dataset.label = file.name;
+                    document.getElementById('image_url').value = croppedCanvas.toDataURL();
+                    imageElement.src = croppedCanvas.toDataURL();
+                    image_uploaded = true
+                    $('#exampleModal').modal('toggle');
+                };
+            });
+
+            reader.readAsDataURL(file);
+        });
+
+    </script>
+
+{% endblock %}

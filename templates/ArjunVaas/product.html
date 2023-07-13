@@ -1,0 +1,344 @@
+{% extends "ArjunVaas/producttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+
+        body {
+            background-color: white !important;
+        }
+
+        #nav-btn {
+            background-color: white !important;
+        }
+
+        .carousel-item {
+            height: 400px;
+        }
+
+        .d-block {
+            object-fit: contain;
+        }
+
+        .pinfo {
+            font-size: 80%;
+            margin: 0;
+        }
+ 
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  will-change: transform;
+  transform: translateZ(0);
+  display: flex;
+  height: 50px;
+  box-shadow: 0 -2px 5px -2px #2b2a29;
+  background-color: #272424;
+}
+.mobile-bottom-nav__item {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* .mobile-bottom-nav__item--active {
+  color: red;
+} */
+.mobile-bottom-nav__item-content {
+  display: flex;
+  flex-direction: column;
+}
+img.header-image {
+    position: fixed;
+    right: 0;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px !important;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #fff;
+    left: 41%;
+    padding: 9px;
+    /* height: 65px; */
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
+    /* width: 65px !important; */
+    bottom: 5px;
+    left: 50%;
+    margin: 0 !important;
+    /* width: 23px; */
+}
+
+footer span {
+    font-size: 0.8rem;
+    display: none;
+    
+
+}
+h5.gghg {
+    font-size: 13px;
+}
+a.mobile-bottom-nav__item-content {
+    color: #f7ecec;
+}
+.IcnFooter {
+    font-size: 22px;
+    margin-top: 12px;
+}
+/* img.header-image {
+    display: none;
+}
+footer span {
+    display: none;
+    font-size: 0.8rem;
+} 
+.mb-5.container.container-fluid {
+    margin-right: -10px;
+}
+footer {
+    position: sticky !important;
+}
+footer span {
+    font-size: 0.8rem;
+    display: none;
+}
+
+
+
+
+
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main style="margin-bottom: 5%; margin-top: 3%">
+        <div class="mb-5 container container-fluid" style="margin-bottom: 0.5rem!important; font-family:;">
+            <div class="" style="display: flex;flex-direction: column;">
+                {% if try_on_image %}
+                <img style="border-radius: 5%;" src="{{try_on_image}}" alt="" />
+                {% elif product.image_1 %}
+                <img src={{try_on_image}} alt="" />
+                {% endif %}
+                <div style="display: flex;flex-direction: column;margin: 1rem 0 1rem 0;">
+                    <span style="font-weight: 600;font-family: 'corbel', text size: 40px; sans-serif;">{{product.name}}</span>
+                    <span style="font-weight: 500;font-family: 'lato', text size: 40px; sans-serif;"> Code : {{product.code}}</span>
+                    <span style="display: flex;font-weight: 500;font-family: 'akshar', text size: 40px; sans-serif;"><i class="rupee-icon"></i> {{product.price|floatformat}}</span>
+                </div>
+                
+                <div style="display: flex;justify-content: space-around;">
+                    <button onclick="location.href='{{product.url}}'" style="border-style: none;background-color: white; width: 33%">
+                      <img src="{% static 'ArjunVaas/img/icons/share.jpg' %}" style="width: 100%" href="{{product.url}}"/>
+                      </button>
+                    <!-- <form style="display: flex;justify-content: flex-end;" action="/save-tryon" method="POST"> -->
+                        <!-- <a style="border-style: none;background-color: #fff;width: 40px;"><i class="heart-icon"></i></a> -->
+                        <form id="save" style="display: flex;justify-content: center; width: 33%;" method="post" action="/save-tryon">
+                            {% csrf_token %}
+                            <input type="hidden" name="product" value="{{product.id}}" />
+                            <input type="hidden" name="try_on_image_type" value="{{ request.GET.img }}" />
+                            <button type="submit" onclick="showPopup()" style="border-style: none;background-color: white; ">
+                                <img src="{% static 'ArjunVaas/img/icons/share.jpg' %}" style="width: 100%" />
+                            </button>
+                        </form>
+                        <button id="share_p_btn" style="border-style: none;background-color: white; width: 33%">
+                            <img src="{% static 'ArjunVaas/img/icons/share.jpg' %}" style="width: 100%;"/>
+                        </button>
+                    <!-- </form> -->
+                </div>
+                
+            </div>
+            
+            <!--
+            <div style="margin-bottom: 5%;">
+                <a href="javascript:history.back()"><i class="fa-sharp fa-solid fa-arrow-left ml-3 my-3"
+                                                       style="color: #222; float: left;"></i></a>
+            </div>
+            -->
+
+            <!-- <div id="carouselExampleIndicators" class="carousel slide indicators | mb-5" data-ride="carousel"
+                 style="margin-bottom: 0px !important;">
+                <div class="carousel-inner my-slider">
+                    <div class="carousel-item active indicators">
+                        <img class="d-block w-100" style="height: 90%;" src="/{{ product.main_image }}"
+                             alt="First slide">
+                    </div>
+                    {% if product.image_1 %}
+                        <div class="carousel-item indicators">
+                            <img class="d-block w-100" src="/{{ product.image_1 }}"
+                                 alt="Second slide">
+                        </div>
+                    {% endif %}
+                    {% if product.image_2 %}
+                        <div class="carousel-item indicators">
+                            <img class="d-block w-100" src="/{{ product.image_2 }}"
+                                 alt="Third slide">
+                        </div>
+                    {% endif %}
+                    {% if product.image_3 %}
+                        <div class="carousel-item indicators">
+                            <img class="d-block w-100" src="/{{ product.image_3 }}"
+                                 alt="Firth slide">
+                        </div>
+                    {% endif %}
+                    {% if product.image_4 %}
+                        <div class="carousel-item indicators">
+                            <img class="d-block w-100" src="/{{ product.image_4 }}"
+                                 alt="Fifth slide">
+                        </div>
+                    {% endif %}
+                    {% if product.image_5 %}
+                        <div class="carousel-item indicators">
+                            <img class="d-block w-100" src="/{{ product.image_5 }}"
+                                 alt="Sixth slide">
+                        </div>
+                    {% endif %}
+                </div>
+                <ol class="carousel-indicators" style="z-index: -1">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0"
+                        class="carousel-indicator bg-dark active">
+                    </li>
+                    {% if product.image_1 %}
+                        <li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark"
+                            data-slide-to="1">
+                        </li>
+                    {% endif %}
+                    {% if product.image_2 %}
+                        <li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark"
+                            data-slide-to="2">
+                        </li>
+                    {% endif %}
+                    {% if product.image_3 %}
+                        <li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark"
+                            data-slide-to="3">
+                        </li>
+                    {% endif %}
+                    {% if product.image_4 %}
+                        <li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark"
+                            data-slide-to="4">
+                        </li>
+                    {% endif %}
+                    {% if product.image_5 %}
+                        <li data-target="#carouselExampleIndicators" class="carousel-indicator bg-dark"
+                            data-slide-to="5">
+                        </li>
+                    {% endif %}
+
+                </ol>
+            </div> -->
+            <!-- <a href="/"><img style="margin-left: 5%" src="{% static 'ArjunVaas/img/home_page_icons/logo.png' %}" alt=""
+                             class="home-logo"></a> -->
+            {% comment %} <img src="{% static 'ArjunVaas/img/product-icons/Slider Page copy.jpg' %}"> {% endcomment %}
+
+        </div>
+        <img src="{% static 'ArjunVaas/img/footer/product_details_footer28.jpg' %}" alt="" />
+            <!-- <p class="pinfo">Product Information</p>
+            <p class="pinfo">Code: {{ product.code }}</p>
+            <p class="pinfo">Color: {{ product.color }}</p>
+            <p class="pinfo">{{ brand.name }} - {{ product.gender }} - {{ product.type }}</p> -->
+            <img src="{{product_image}}" />
+        </div>
+
+                      <div id="popup" style="display: none">Added to wishlist!</div>
+
+    </main>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document" style="height: 100%">
+            <div class="modal-content" style="height: 100%">
+                <div class="modal-header">
+                    <!--<h5 class="modal-title" id="exampleModalLabel">Try-on</h5>-->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img style="display: block;margin-left: auto;margin-right: auto;" id="image1"
+                         src="/{{ product.main_image }}">
+                </div>
+                <!-- <div class="modal-footer">
+                    <form method="post" action="/save-tryon">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-primary">
+                            <a id="share_p_btn" href="#" style="color: white;" data-action="share/whatsapp/share">Share</a>
+                        </button>
+                        <button type="button" class="btn btn-danger">
+                            <a href="{{ product.url }}" style="color: white">
+                                Buy Now
+                            </a>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Save Try-on
+                            <a href="#">
+                                <input type="text" name="product" value="{{ product.id }}" hidden>
+                            </a>
+                        </button>
+                    </form>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <footer>
+    
+        <nav class="mobile-bottom-nav">
+            <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                 <a href="/" class="mobile-bottom-nav__item-content">
+                    <i class="fa-solid fa-house IcnFooter"></i>
+                       <h5 class="gghg">Home</h5>
+                 </a>		
+            </div>
+          
+           <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+            <a href="/tryons" class="mobile-bottom-nav__item-content">
+               <i class="fa fa-heart IcnFooter"></i>
+                  <h5 class="gghg">Wish List</h5>
+            </a>		
+       </div>
+            
+         
+        </nav>
+    </footer>
+
+
+
+{% endblock %}
+
+
+{% block footerscripts %}
+    <script>
+        share_button = document.getElementById('share_p_btn')
+        share_button.addEventListener('click', function () {
+            var share_url = "whatsapp://send?text=We always want to deliver real fun for users. We blended art and tech with forward thinking. We don’t just keep up with technology. We embrace it, live it and breathe it. " + window.location.href;
+            window.open(share_url, '_blank');
+        })
+    function showPopup() {
+      let popup = document.getElementById('popup');
+      popup.style.display = 'block';// The popup will disappear after 2 seconds.
+      return Promise.resolve()
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+  document.getElementById("save")
+        .addEventListener('submit', async function (e) {
+          // prevent the form from submitting
+          e.preventDefault();
+          console.log("hi")
+          // run your function
+          await showPopup();
+          await sleep(2000);
+          e.preventDefault();
+
+          // now you can submit the form
+          showPopup().then(() => this.submit())
+        });
+    </script>
+
+{% endblock %}

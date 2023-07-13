@@ -1,0 +1,160 @@
+{% extends "ArjunVaas/paymenttemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+        body {
+            background-color: #FEF9FFFF !important;
+        }
+
+        #nav-btn {
+            background-color: #FEF9FFFF !important;
+        }
+
+        .img-wrapper {
+            position: relative;
+            width: 100%;
+            font-size: 0;
+        }
+
+        .img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(128, 128, 128, 0.5);
+        }
+
+        .img-wrapper img {
+            width: 100%;
+        }
+        .products, .brands {
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr)) !important;
+        }
+        
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    will-change: transform;
+    transform: translateZ(0);
+    display: flex;
+    height: 50px;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #272424;
+  }
+  footer {
+    position: sticky !important;
+}
+  .mobile-bottom-nav__item {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  /* .mobile-bottom-nav__item--active {
+    color: red;
+  } */
+  .mobile-bottom-nav__item-content {
+    display: flex;
+    flex-direction: column;
+  }
+  h5.gghg {
+      font-size: 13px;
+  }
+  a.mobile-bottom-nav__item-content {
+      color: #f7ecec;
+  }
+  .IcnFooter {
+      font-size: 22px;
+      margin-top: 12px;
+  }
+
+  img.header-image {
+    position: fixed;
+    right: 0;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px !important;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #fff;
+    left: 41%;
+    padding: 9px;
+    /* height: 65px; */
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
+    /* width: 65px !important; */
+    bottom: 5px;
+    left: 50%;
+    margin: 0 !important;
+    /* width: 23px; */
+}
+footer span {
+    display: none;
+    font-size: 0.8rem;
+
+}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <main style="margin-top: 3%">
+        <div class="container">
+            <a href="{{ banner.href }}" target="_blank">
+                <img src="{{ banner.img }}" alt="" class="peoples-img | mx-auto">
+            </a>
+        </div>
+        <div class="container">
+            <!-- Third row -->
+            <div class="">
+                <!--<h3 class="font-weight-bold">Brands</h3>-->
+                <section class="brands">
+                    {% for brand in brands %}
+                        {% if brand.active %}
+                            <article class="brand">
+                                <a href="category/{{ brand.id }}"><img src="/{{ brand.image }}" alt=""
+                                                                       class="brand__img"></a>
+                            </article>
+                        {% else %}
+                            <article class="brand" title="No products available in this category at the moment...">
+                                <div class="img-wrapper">
+                                    <div class="img-overlay"></div>
+                                    <a href="#"><img src="/{{ brand.image }}" alt=""
+                                                     class="brand__img"></a>
+                                </div>
+                            </article>
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
+    <!-- <div style="height: 5rem; width: 100%; background-color: white"></div> -->
+    <footer>
+    
+        <nav class="mobile-bottom-nav">
+            <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                 <a href="/" class="mobile-bottom-nav__item-content">
+                    <i class="fa-solid fa-house IcnFooter"></i>
+                       <h5 class="gghg">Home</h5>
+                 </a>		
+            </div>
+       
+           <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+            <a href="/tryons" class="mobile-bottom-nav__item-content">
+               <i class="fa fa-heart IcnFooter"></i>
+                  <h5 class="gghg">Wish List</h5>
+            </a>		
+       </div>
+            
+         
+        </nav>
+    </footer>
+    </main>
+
+{% endblock %}

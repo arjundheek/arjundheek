@@ -1,0 +1,153 @@
+{% extends "ArjunVaas/hometemplate.html" %}
+
+
+{% load static %}
+
+{% block content %}
+    <img src="{{ img_name }}">
+    <main>
+        <div class="container">
+            <!-- Third row -->
+            <div class="row mt-12 d-flex flex-column align-items-center justify-content-center">
+                <div class="row mt-3">
+                    <div class="col">
+                        Select Skin Color
+                        <hr class="hr-1">
+                    </div>
+                    <div class="col">
+                        {% if selected_profile.skin %}
+                        <a href="#" onclick="window.location.href = 'user-profile'" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        {% else %}
+                        <a href="#" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        {% endif %}
+                        <hr class="hr-2">
+                    </div>
+                </div>
+                <div id="profile_image" class="col-12" style="padding: 10;">
+                    <div class="rounded shadow border border-dark mx-auto mt-3 d-flex align-items-center justify-content-center">
+                        <img src="/{{ selected_profile.picture }}" class="rounded shadow border border-dark mx-auto"
+                             style="width: 100%"/>
+                    </div>
+                </div>
+            </div>
+            <!-- Fourth row -->
+            <div class="my-margin row mt-5 d-flex flex-column align-items-center justify-content-center">
+                <form method="post" action="user-profile">
+                    {% csrf_token %}
+                    <div class="col-9">
+                        {% if selected_profile.skin %}
+                        <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="{{ selected_profile.skin }}">
+                        {% else %}
+                        <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="#FAC7C8">
+                        {% endif %}
+                        <label for="colorpicker" style="font-size: 70%;">Pick color from facial skin</label>
+                    </div>
+                    {% if selected_profile.skin %}
+                    <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
+                            class="btn btn-primary" style="width: 100%; margin-top: 5%;">Continue
+                    </button>
+                    {% else %}
+                    <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
+                            class="btn btn-primary" style="width: 90%; margin-top: 5%;" disabled>Continue
+                    </button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <footer>
+    
+            <nav class="mobile-bottom-nav">
+                <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                     <a href="/" class="mobile-bottom-nav__item-content">
+                        <i class="fa-solid fa-house IcnFooter"></i>
+                           <h5 class="gghg">Home</h5>
+                     </a>			
+                </div>
+              
+               <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                <a href="/tryons" class="mobile-bottom-nav__item-content">
+                   <i class="fa fa-heart IcnFooter"></i>
+                      <h5 class="gghg">Wish List</h5>
+                </a>		
+           </div>
+                
+             
+            </nav>
+        </footer>
+    </main>
+
+{% endblock %}
+
+{% block footerscripts %}
+    <script>
+        function update_continue() {
+            document.getElementById('continue_button').disabled = false
+        }
+    </script>
+<style>
+    .mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  will-change: transform;
+  transform: translateZ(0);
+  display: flex;
+  height: 50px;
+  box-shadow: 0 -2px 40px -2px #db9616;
+  background-color: #272424;
+}
+.mobile-bottom-nav__item {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* .mobile-bottom-nav__item--active {
+  color: red;
+} */
+.mobile-bottom-nav__item-content {
+  display: flex;
+  flex-direction: column;
+}
+h5.gghg {
+    font-size: 13px;
+}
+a.mobile-bottom-nav__item-content {
+    color: #f7ecec;
+}
+.IcnFooter {
+    font-size: 22px;
+    margin-top: 12px;
+}
+
+img.header-image {
+    position: fixed;
+    right: 0;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px !important;
+    box-shadow: 0 -2px 5px -2px #333;
+    background-color: #fff;
+    left: 41%;
+    padding: 9px;
+    /* height: 65px; */
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
+    /* width: 65px !important; */
+    bottom: 5px;
+    left: 50%;
+    margin: 0 !important;
+    /* width: 23px; */
+}
+footer span {
+    font-size: 0.8rem;
+    display: none;
+}
+
+</style>
+
+{% endblock %}

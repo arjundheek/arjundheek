@@ -1,0 +1,164 @@
+{% extends "ArjunVaas/tryontemplate.html" %}
+{% load static %}
+
+{% block headerscripts %}
+    <style>
+
+
+
+
+
+.mobile-bottom-nav__item {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* .mobile-bottom-nav__item--active {
+  color: red;
+} */
+.mobile-bottom-nav__item-content {
+  display: flex;
+  flex-direction: column;
+}
+h5.gghg {
+    font-size: 13px;
+}
+a.mobile-bottom-nav__item-content {
+    color: #000;
+}
+.IcnFooter {
+    font-size: 22px;
+    margin-top: 12px;
+}
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  will-change: transform;
+  transform: translateZ(0);
+  display: flex;
+  height: 62px;
+  box-shadow: 0 -2px 5px -2px #333;
+  background-color: #fff;
+}
+  
+
+        body {
+            background-color: #FEF9FFFF !important;
+        }
+
+        #nav-btn {
+            background-color: #FEF9FFFF !important;
+        }
+
+        .product__img {
+            float: left;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .filter-select {
+            padding: 10%;
+        }
+
+        .filter-select:hover {
+            background-color: rgb(44 44 44 / 15%);
+        }
+
+        .filter-select.selected {
+            background-color: rgb(44 44 44 / 15%);
+        }
+
+        .select-option-container {
+            flex-grow: 0.4 !important;
+        }
+
+        .options-container {
+            border-left: 2px solid rgba(0, 0, 0, 0.16);
+            margin-left: 5%;
+            height: 500px;
+        }
+
+        .option-container {
+            padding: 7%;
+            border-bottom: 1px solid rgb(44 44 44 / 15%);
+            display: inline-flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .color-checkbox {
+            float: left;
+        }
+
+        .color-span {
+            float: left;
+            margin-left: 5%;
+        }
+
+        .type-checkbox {
+            float: left;
+        }
+
+        .type-span {
+            float: left;
+            margin-left: 5%;
+        }
+        img.header-image {
+            left: 43%;
+    position: absolute;
+    max-width: 47px !important;
+    top: -42px !important;
+    border-radius: 50%;
+}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <!-- Third row -->
+         <div class="img">
+            <img src="{% static 'ArjunVaas/img/new_gender_icons/crp' %}" alt=""/>
+         </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+ 
+    <footer>
+    
+        <nav class="mobile-bottom-nav">
+            <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                 <a href="/home" class="mobile-bottom-nav__item-content">
+                    <i class="fa-solid fa-house IcnFooter"></i>
+                       <h5 class="gghg">Home</h5>
+                 </a>		
+            </div>
+            <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+                <a href="/user-info" class="mobile-bottom-nav__item-content">
+                   <i class="fa fa-user IcnFooter"></i>
+                      <h5 class="gghg">.</h5>
+                </a>		
+           </div>
+           <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+            <a href="/tryons" class="mobile-bottom-nav__item-content">
+               <i class="fa fa-heart IcnFooter"></i>
+                  <h5 class="gghg">Wish List</h5>
+            </a>		
+       </div>
+            
+         
+        </nav>
+    </footer>
+{% endblock %}
+
+{% block footerscripts %}
+
+{% endblock %}

@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <!-- Fontawesome -->
+    <script src="https://kit.fontawesome.com/8dd7d264aa.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- custom style -->
+    <link rel="stylesheet" href="{% static 'ArjunVaas/style.css' %}">
+    <title>Document</title>
+    {% block headerscripts %}
+
+    {% endblock %}
+    <style>
+        body {
+            height: auto;
+            overflow: auto;
+            color: #6c757d !important;
+        }
+
+        #nav-btn {
+            background-color: #ffffff;
+            border: none;
+            color: black;
+            width: 50px;
+            height: 50px;
+        }
+
+        .reg-btn {
+            width: 30%;
+            margin-left: 10%;
+            font-size: 15px;
+        }
+
+        /* The sidebar menu */
+        .sidebar {
+            height: 100%; /* 100% Full-height */
+            width: 0; /* 0 width - change this with JavaScript */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            top: 0;
+            left: 0;
+            background-color: #e2e2e2; /* Black*/
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 60px; /* Place content 60px from the top */
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+        }
+
+        /* The sidebar links */
+        .sidebar a {
+            padding: 8px 8px 8px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Position and style the close button (top right corner) */
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* The button used to open the sidebar */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+        footer {
+    position: sticky !important;
+}
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s; /* If you want a transition effect */
+            padding: 20px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidebar {
+                padding-top: 15px;
+            }
+
+            .sidebar a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column">
+
+<header>
+    <!-- Toggler -->
+    <button data-mdb-toggle="sidenav" data-mdb-target="#sidenav-1" class="btn btn-primary"
+            aria-controls="#sidenav-1" aria-haspopup="true" onclick="openNav()" id="nav-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <!-- Toggler -->
+    <div class="container">
+        <a href="/"><img src="{% static 'ArjunVaas/img/home_page_icons/logo.png' %}" alt="" class="home-logo"></a>
+
+    </div>
+</header>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <img src="{% static 'ArjunVaas/img/menu_icons/logo.png' %}"
+         style="width: 150px; display: block; margin-left: auto; margin-right: auto;">
+    <img src="{% static 'ArjunVaas/img/menu_icons/MenuImage.png' %}" style="height: 250px;">
+    <a href="/user-info" style="float: left; margin-left: 0; padding-left: 0;"><img
+            src="{% static 'ArjunVaas/img/menu_icons/shop_now.png' %}" style="float: left; width: 50%;"></a>
+    <!--
+    <a href="delete">Account delete</a>
+    <a href="renewal">Account renewal</a>
+    <a href="brands">Brands</a>
+    <a href="category">Category</a>
+    <a href="home">Home</a>
+    <a href="products">Products</a>
+    <a href="slider1">Slider1</a>
+    <a href="slider2">Slider2</a>
+    <a href="user-info">User info</a>
+    <a href="user-profile">User profile</a>
+    <a href="user-profile-edit">User profile edit</a>
+    -->
+    <a href="#">
+        <form method="post" action="/create-new-profile">
+            {% csrf_token %}
+            <button type="submit"
+                    style="color: inherit; text-decoration: inherit; display: inherit; border: none; padding: 0; background-color: inherit">
+                Add Photo
+            </button>
+        </form>
+    </a>
+    <a href="/user-info">My Album</a>
+    <a href="/renewal">Renewals</a>
+    <a id="share_btn" href="#" data-action="share/whatsapp/share">Share</a>
+    <a href="/delete">Delete Account</a>
+    <hr style="border-color: white;">
+    <div style="margin-bottom: 5%;">
+        {% if user.is_authenticated %}
+            <a href="/logout" style="padding: 0; display: inline;">
+                <button type="button" class="btn btn-danger reg-btn">Logout</button>
+            </a>
+        {% else %}
+            <a href="/register" style="padding: 0; display: inline;">
+                <button type="button" class="btn btn-danger reg-btn">Sign up</button>
+            </a>
+            <a href="/login" style="display: inline;">
+                <button type="button" class="btn btn-danger reg-btn">Login</button>
+            </a>
+        {% endif %}
+    </div>
+</div>
+<!-- End sidebar -->
+
+
+<main>
+    {% block content %}
+
+    {% endblock %}
+</main>
+
+<footer>
+    <img src="{% static 'ArjunVaas/img/footer/footer_img.jpg' %}">
+</footer>
+
+</body>
+<script>
+    window.onload = function(){
+        let width = window.screen.availWidth
+        let height = window.screen.availHeight
+        if(height>1200 || width>820){
+            document.body.innerHTML = '<p class="d-flex justify-content-center align-items-center">This page is visible only on mobile devices</p>'
+'<p>This page is visible only on mobile divices</p>'
+        }
+    }
+    document.getElementById('share_btn').href = "whatsapp://send?text=We always want to deliver real fun for users. We blended art and tech with forward thinking. We don’t just keep up with technology. We embrace it, live it and breathe it. " + window.location
+
+    $(document).on('contextmenu', function (e) {
+        // stop long touch hold from poping up context menus
+        return false;
+    });
+
+
+    /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+
+    document.getElementById('hint_id_password1').innerHTML = ""
+    document.getElementById('hint_id_username').innerHTML = ""
+
+</script>
+
+</html>
