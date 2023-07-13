@@ -537,11 +537,16 @@ ol, li {
                                 <div id="select-type" class="row filter-select" onclick="change_selected(this.id)">
                                     Type
                                 </div>
+                              <div id="select-price" class="row filter-select" onclick="change_selected(this.id)">
+                                    Price
+                                </div>
                             </div>
                             <div id="option-color-container" class="col options-container">
 
                             </div>
                             <div id="option-type-container" class="col options-container" hidden>
+                            </div>
+                            <div id="option-price-container" class="col options-container" hidden>
                             </div>
                         </div>
                     </div>
@@ -579,13 +584,23 @@ ol, li {
 
             if (id === "select-color") {
                 document.getElementById("select-type").classList.remove('selected');
+                document.getElementById("select-price").classList.remove('selected');
+                document.getElementById("option-price-container").setAttribute("hidden", true);
                 document.getElementById("option-type-container").setAttribute("hidden", true);
                 document.getElementById("option-color-container").removeAttribute("hidden");
-            } else {
+            } else if (id === "select-type") {
                 document.getElementById("select-color").classList.remove('selected');
-                document.getElementById("option-type-container").removeAttribute("hidden");
+                document.getElementById("select-price").classList.remove('selected');
+                document.getElementById("option-price-container").setAttribute("hidden", true);
                 document.getElementById("option-color-container").setAttribute("hidden", true);
-            }
+                document.getElementById("option-type-container").removeAttribute("hidden");
+            } else {
+              document.getElementById("select-color").classList.remove('selected');
+              document.getElementById("select-type").classList.remove('selected');
+              document.getElementById("option-type-container").setAttribute("hidden", true);
+              document.getElementById("option-color-container").setAttribute("hidden", true);
+              document.getElementById("option-price-container").removeAttribute("hidden");
+          }
         }
 
         function clear_all_types() {
@@ -598,6 +613,12 @@ ol, li {
             var colors = document.getElementsByClassName("color-checkbox");
             for (let i = 0; i < colors.length; i++) {
                 colors[i].checked = false
+            }
+        }
+        function clear_all_prices() {
+            var prices = document.getElementsByClassName("price-checkbox");
+            for (let i = 0; i < prices.length; i++) {
+                prices[i].checked = false
             }
         }
         {#function get_colors() {#}
@@ -636,8 +657,19 @@ ol, li {
                     first_type = false
                 }
             }
+            param_url += "]&prices="
+            first_price = true
+          var prices = document.getElementsByClassName("price-checkbox");
+            for (i = 0; i < prices.length; i++) {
+                if (prices[i].checked === true) {
+                    if (first_price === false) {
+                        param_url += ','
+                    }
+                    param_url += prices[i].value
+                    first_price = false
+                }
+            }
 
-            param_url += "]"
 
             url = window.location.href
             if (url.includes("?")) {
@@ -679,8 +711,10 @@ $(document).ready(function(){
   }
   let colors = []
   let types = []
+  let ranges = ["-200", "200-400", "400-600", "600-900", "800-1000", "1000-1200", "1200-1400", "1400-1600", "1600-1800", "1800-2000", "2000-"]
   document.getElementById("option-color-container").innerHTML = ""
   document.getElementById("option-type-container").innerHTML = ""
+  document.getElementById("option-price-container").innerHTML = ""
   fetch(`/products/json/${lastTab}`)
   .then(response => response.json())
   .then((response) => {
@@ -694,8 +728,9 @@ $(document).ready(function(){
       }
     }
     console.log(colors)
-    let selected_colors = {{ selected_colors|safe }}
-    let selected_types = {{ selected_types|safe }}
+    let selected_colors = {{ selected_colors|safe }};
+    let selected_types = {{ selected_types|safe }};
+    let selected_ranges = {{ selected_ranges|safe }};
 
   let colors_html =
     `<p style="float: right; color: #e13980" onclick="clear_all_colors()"><b>CLEAR ALL</b></p>
@@ -736,8 +771,29 @@ $(document).ready(function(){
                                     `
     }
   }
+  let ranges_html = `<p style="float: right; color: #e13980" onclick="clear_all_ranges()"><b>CLEAR ALL</b></p>
+                                <br>`
+  for (let i = 0; i < ranges.length; i++) {
+    let show_range = ""
+    if (selected_ranges.includes(ranges[i]) === true) {
+      ranges_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" checked class="price-checkbox"
+                                                   value="${ranges[i]}"><span class="color-span"> ${ranges[i]}</span>
+                                        </div>
+                                    `
+    } else {
+      ranges_html += `
+                                        <div class="option-container">
+                                            <input type="checkbox" class="price-checkbox"
+                                                   value="${ranges[i]}"><span class="color-span">${ranges[i]}</span>
+                                        </div>
+                                    `
+    }
+  }
   document.getElementById("option-color-container").innerHTML += colors_html
   document.getElementById("option-type-container").innerHTML += types_html
+  document.getElementById("option-price-container").innerHTML += ranges_html
 })
 
 });
