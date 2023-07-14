@@ -11,9 +11,9 @@ from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.template import loader
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from .models import *
 from Accounts.models import *
@@ -36,20 +36,16 @@ def check_active_profile(request):
     global profile_settings
 
     if profile_settings.active == 0:
-        template = loader.get_template('Accounts/account-renewal.html')
-        context = {
-
-        }
+        template = loader.get_template("Accounts/account-renewal.html")
+        context = {}
         return HttpResponse(template.render(context, request))
 
     return True
 
 
 def index(request):
-    template = loader.get_template('ArjunVaas/index.html')
-    context = {
-
-    }
+    template = loader.get_template("ArjunVaas/index.html")
+    context = {}
     return HttpResponse(template.render(context, request))
 
 
@@ -63,8 +59,8 @@ def home(request):
         return profile_status
 
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
     }
 
     """
@@ -73,7 +69,7 @@ def home(request):
     else:
         template = loader.get_template('ArjunVaas/user-profile-edit.html')
     """
-    template = loader.get_template('ArjunVaas/home.html')
+    template = loader.get_template("ArjunVaas/home.html")
     return HttpResponse(template.render(context, request))
 
 
@@ -86,46 +82,46 @@ def products(request, category):
     ranges = []
     lower_price, upper_price = 0, 1000000
 
-    if request.method == 'GET':
-        get_colors = request.GET.get('colors')
-        get_types = request.GET.get('types')
-        get_prices = request.GET.get('prices')
+    if request.method == "GET":
+        get_colors = request.GET.get("colors")
+        get_types = request.GET.get("types")
+        get_prices = request.GET.get("prices")
 
-        if get_colors and get_colors != '[]':
-            get_colors = get_colors.replace('"', '')
-            get_colors = get_colors.replace("'", '')
-            get_colors = get_colors.replace('[', '')
-            get_colors = get_colors.replace(']', '')
+        if get_colors and get_colors != "[]":
+            get_colors = get_colors.replace('"', "")
+            get_colors = get_colors.replace("'", "")
+            get_colors = get_colors.replace("[", "")
+            get_colors = get_colors.replace("]", "")
 
-            if ',' in get_colors:
-                for gc in get_colors.split(','):
+            if "," in get_colors:
+                for gc in get_colors.split(","):
                     selected_colors.append(gc.replace("'", ""))
             else:
                 selected_colors.append(get_colors)
 
-        if get_types and get_types != '[]':
-            get_types = get_types.replace('"', '')
-            get_types = get_types.replace("'", '')
-            get_types = get_types.replace('[', '')
-            get_types = get_types.replace(']', '')
+        if get_types and get_types != "[]":
+            get_types = get_types.replace('"', "")
+            get_types = get_types.replace("'", "")
+            get_types = get_types.replace("[", "")
+            get_types = get_types.replace("]", "")
 
-            if ',' in get_types:
-                for gt in get_types.split(','):
+            if "," in get_types:
+                for gt in get_types.split(","):
                     selected_types.append(gt.replace("'", ""))
             else:
                 selected_types.append(get_types)
 
         if get_prices:
-            get_prices = get_prices.split(',')
+            get_prices = get_prices.split(",")
             min_lp, max_up = 0, 1000000
             for rng in get_prices:
                 selected_ranges.append(rng.strip())
-                prices = rng.split('-')
+                prices = rng.split("-")
                 if len(prices) == 2:
                     lp, up = prices[0], prices[1]
-                    if lp == '':
+                    if lp == "":
                         lp = 0
-                    if up == '':
+                    if up == "":
                         up = 1000000
                     ranges.append([int(lp), int(up)])
 
@@ -177,23 +173,23 @@ def products(request, category):
     if len(display_products) % 2 != 0:
         extra_products.append(1)
 
-    template = loader.get_template('ArjunVaas/products.html')
+    template = loader.get_template("ArjunVaas/products.html")
     context = {
-        'category': category,
-        'category_name': Category.objects.get(id=category).title,
-        'gender': gender,
-        'products': sorted(display_products, key=lambda x: x.price),
-        'colors': colors,
-        'types': types,
-        'banner': Banner.objects.filter(page="products")[0],
-        'selected_colors': selected_colors,
-        'selected_types': selected_types,
-        'selected_ranges': selected_ranges,
-        'brand_name': brand.name,
-        'extra_products': extra_products,
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'profile_picture': selected_profile.picture
+        "category": category,
+        "category_name": Category.objects.get(id=category).title,
+        "gender": gender,
+        "products": sorted(display_products, key=lambda x: x.price),
+        "colors": colors,
+        "types": types,
+        "banner": Banner.objects.filter(page="products")[0],
+        "selected_colors": selected_colors,
+        "selected_types": selected_types,
+        "selected_ranges": selected_ranges,
+        "brand_name": brand.name,
+        "extra_products": extra_products,
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "profile_picture": selected_profile.picture,
     }
     return HttpResponse(template.render(context, request))
 
@@ -202,7 +198,7 @@ def products(request, category):
 def product(request, id):
     global profile_settings, selected_profile
     # get_user_profile(request.user)
-    try_on_image = request.GET.get('img', None)
+    try_on_image = request.GET.get("img", None)
     product = Product.objects.get(id=id)
     category = Category.objects.get(id=product.category.id)
     brand = Brand.objects.get(id=category.brand.id)
@@ -211,38 +207,43 @@ def product(request, id):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    template = loader.get_template('ArjunVaas/product.html')
+    template = loader.get_template("ArjunVaas/product.html")
     select_try_on = {
-        'main_image': product.try_on_main_image.url if product.try_on_main_image else '',
-        'image1': product.try_on_image1.url if product.try_on_image1 else '',
-        'image2': product.try_on_image2.url if product.try_on_image2 else '',
+        "main_image": product.try_on_main_image.url
+        if product.try_on_main_image
+        else "",
+        "image1": product.try_on_image1.url if product.try_on_image1 else "",
+        "image2": product.try_on_image2.url if product.try_on_image2 else "",
     }
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'product': product,
-        'category': category,
-        'brand': brand,
-        'profile_picture': selected_profile.picture,
-        'try_on_image': select_try_on.get(try_on_image, product.try_on_main_image),
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "product": product,
+        "category": category,
+        "brand": brand,
+        "profile_picture": selected_profile.picture,
+        "try_on_image": select_try_on.get(try_on_image, product.try_on_main_image),
     }
     return HttpResponse(template.render(context, request))
 
 
 def ProductJson(request, category):
     global profile_settings, selected_profile
-    products = Product.objects.filter(category=category,
-                                      gender__icontains=selected_profile.gender.lower())
+    products = Product.objects.filter(
+        category=category, gender__icontains=selected_profile.gender.lower()
+    )
 
     serializer = ProductSerializer(products, many=True)
 
-    return JsonResponse({
-        'success': True,
-        'data': serializer.data,
-    })
+    return JsonResponse(
+        {
+            "success": True,
+            "data": serializer.data,
+        }
+    )
 
 
-@login_required(login_url='/login/')
+@login_required(login_url="/login/")
 def slider2(request):
     global profile_settings, selected_profile
     get_user_profile(request.user)
@@ -251,10 +252,10 @@ def slider2(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    template = loader.get_template('ArjunVaas/slider2.html')
+    template = loader.get_template("ArjunVaas/slider2.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
     }
     return HttpResponse(template.render(context, request))
 
@@ -271,18 +272,23 @@ def user_info(request):
     # profiles = Profile.objects.all().filter(user=request.user)
     profiles = Profile.objects.all()
     for profile in profiles:
-        if profile.gender == '' or profile.picture == '' or profile.age == 0 or profile.height == 0.0:
+        if (
+            profile.gender == ""
+            or profile.picture == ""
+            or profile.age == 0
+            or profile.height == 0.0
+        ):
             profile.active = False
         else:
             profile.active = True
 
-        profile.height = f"{profile.height}".replace('.', "'") + '"'
+        profile.height = f"{profile.height}".replace(".", "'") + '"'
 
-    template = loader.get_template('ArjunVaas/user-info.html')
+    template = loader.get_template("ArjunVaas/user-info.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'profiles': profiles
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "profiles": profiles,
     }
     return HttpResponse(template.render(context, request))
 
@@ -296,20 +302,50 @@ def user_profile(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        skin = request.POST['colorpicker']
+    if request.method == "POST":
+        skin = request.POST["colorpicker"]
         selected_profile.skin = skin
         selected_profile.save()
 
-    sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL']
-    adult_heights = {4.0: '4’0”', 4.1: '4’1”', 4.2: '4’2”', 4.3: '4’3”', 4.4: '4’4”', 4.5: '4’5”',
-                     4.6: '4’6”', 4.7: '4’7”', 4.8: '4’8”', 4.9: '4’9”', 5.0: '5’0”', 5.1: '5’1”',
-                     5.2: '5’2”', 5.3: '5’3”', 5.4: '5’4”', 5.5: '5’5”',
-                     5.6: '5’6”', 5.7: '5’7”', 5.8: '5’8”', 5.9: '5’9”', 6.0: '6’0”'}
-    baby_height = {3.0: '3’0”', 3.1: '3’1”', 3.2: '3’2”', 3.3: '3’3”', 3.4: '3’4”', 3.5: '3’5”',
-                   3.6: '3’6”', 3.7: '3’7”', 3.8: '3’8”', 3.9: '3’9”', 4.0: '4’0”'}
+    sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
+    adult_heights = {
+        4.0: "4’0”",
+        4.1: "4’1”",
+        4.2: "4’2”",
+        4.3: "4’3”",
+        4.4: "4’4”",
+        4.5: "4’5”",
+        4.6: "4’6”",
+        4.7: "4’7”",
+        4.8: "4’8”",
+        4.9: "4’9”",
+        5.0: "5’0”",
+        5.1: "5’1”",
+        5.2: "5’2”",
+        5.3: "5’3”",
+        5.4: "5’4”",
+        5.5: "5’5”",
+        5.6: "5’6”",
+        5.7: "5’7”",
+        5.8: "5’8”",
+        5.9: "5’9”",
+        6.0: "6’0”",
+    }
+    baby_height = {
+        3.0: "3’0”",
+        3.1: "3’1”",
+        3.2: "3’2”",
+        3.3: "3’3”",
+        3.4: "3’4”",
+        3.5: "3’5”",
+        3.6: "3’6”",
+        3.7: "3’7”",
+        3.8: "3’8”",
+        3.9: "3’9”",
+        4.0: "4’0”",
+    }
 
-    if 'baby' in selected_profile.gender:
+    if "baby" in selected_profile.gender:
         heights = baby_height
     else:
         heights = adult_heights
@@ -320,12 +356,12 @@ def user_profile(request):
         return profile_status
     """
 
-    template = loader.get_template('ArjunVaas/user-profile.html')
+    template = loader.get_template("ArjunVaas/user-profile.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'sizes': sizes,
-        'heights': heights
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "sizes": sizes,
+        "heights": heights,
     }
     return HttpResponse(template.render(context, request))
 
@@ -353,7 +389,7 @@ def create_new_profile(request):
     profile_settings.active = True
     profile_settings.save()
 
-    return redirect('home')
+    return redirect("home")
 
 
 # @login_required(login_url='/login/')
@@ -364,15 +400,15 @@ def edit_profile(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        profile = Profile.objects.get(id=request.POST['edit-profile'])
+    if request.method == "POST":
+        profile = Profile.objects.get(id=request.POST["edit-profile"])
         selected_profile = profile
         profile_settings.user = profile.user
         profile_settings.main_profile = profile
         profile_settings.active = True
         profile_settings.save()
 
-    return redirect('home')
+    return redirect("home")
 
 
 # @login_required(login_url='/login/')
@@ -383,9 +419,9 @@ def delete_profile(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
+    if request.method == "POST":
         profiles = Profile.objects.all()
-        profile = Profile.objects.get(id=request.POST['delete-profile'])
+        profile = Profile.objects.get(id=request.POST["delete-profile"])
 
         for p in profiles:
             if p != profile:
@@ -398,7 +434,7 @@ def delete_profile(request):
 
         profile.delete()
 
-    return redirect('user-info')
+    return redirect("user-info")
 
 
 # @login_required(login_url='/login/')
@@ -410,9 +446,9 @@ def update_user_profile(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        selected_profile.size = request.POST['select-body-size']
-        selected_profile.height = request.POST['select-body-height']
+    if request.method == "POST":
+        selected_profile.size = request.POST["select-body-size"]
+        selected_profile.height = request.POST["select-body-height"]
 
         selected_profile.save()
 
@@ -422,34 +458,34 @@ def update_user_profile(request):
         return profile_status
     """
     if profile_settings.active == 1:
-        return redirect('user-info')
+        return redirect("user-info")
     else:
-        template = loader.get_template('Accounts/account-renewal.html')
+        template = loader.get_template("Accounts/account-renewal.html")
 
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
     }
     return HttpResponse(template.render(context, request))
 
 
-@login_required(login_url='/login/')
+@login_required(login_url="/login/")
 def renew_profile(request):
     global profile_settings, selected_profile
     get_user_profile(request.user)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         profile_settings.active = 1
         profile_settings.save()
 
-    template = loader.get_template('ArjunVaas/brands.html')
+    template = loader.get_template("ArjunVaas/brands.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'profile_picture': selected_profile.picture
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "profile_picture": selected_profile.picture,
     }
 
-    return redirect('home')
+    return redirect("home")
 
 
 # @login_required(login_url='/login/')
@@ -461,25 +497,29 @@ def user_profile_edit(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        if request.POST['selected_gender'] != selected_profile.gender:
+    if request.method == "POST":
+        if request.POST["selected_gender"] != selected_profile.gender:
             selected_profile.height = 0.0
-            selected_profile.size = ''
+            selected_profile.size = ""
 
-        selected_profile.gender = request.POST['selected_gender']
-        selected_profile.name = request.POST.get('name', False)
-        selected_profile.age = request.POST.get('age', False)
-        selected_profile.phone = request.POST.get('phone', False)
+        selected_profile.gender = request.POST["selected_gender"]
+        selected_profile.name = request.POST.get("name", False)
+        selected_profile.age = request.POST.get("age", False)
+        selected_profile.phone = request.POST.get("phone", False)
 
-        if request.POST['image_url']:
+        if request.POST["image_url"]:
             if selected_profile.picture:
                 # Delete previous image
                 selected_profile.picture.delete()
 
             image_name = randrange(1000000, 10000000)
 
-            with open(f'static/uploads/profiles/{image_name}.jpg', 'wb') as fh:
-                fh.write(base64.b64decode(request.POST['image_url'].replace('data:image/png;base64,', '')))
+            with open(f"static/uploads/profiles/{image_name}.jpg", "wb") as fh:
+                fh.write(
+                    base64.b64decode(
+                        request.POST["image_url"].replace("data:image/png;base64,", "")
+                    )
+                )
 
             reopen = open(f"static/uploads/profiles/{image_name}.jpg", "rb")
             django_file = File(reopen)
@@ -498,11 +538,11 @@ def user_profile_edit(request):
         return profile_status
     """
 
-    template = loader.get_template('ArjunVaas/user-profile-edit.html')
+    template = loader.get_template("ArjunVaas/user-profile-edit.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'img_name': ''
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "img_name": "",
     }
     return HttpResponse(template.render(context, request))
 
@@ -516,7 +556,7 @@ def category(request, brand):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    template = loader.get_template('ArjunVaas/category.html')
+    template = loader.get_template("ArjunVaas/category.html")
 
     products = Product.objects.all()
     categories = Category.objects.all().filter(brand=brand)
@@ -540,52 +580,54 @@ def category(request, brand):
             sorted_categories.append(c)
     selected_colors, selected_types, selected_ranges = [], [], []
     lower_price, upper_price = 0, 100000
-    if request.method == 'GET':
-        get_colors = request.GET.get('colors')
-        get_types = request.GET.get('types')
-        get_prices = request.GET.get('prices')
+    if request.method == "GET":
+        get_colors = request.GET.get("colors")
+        get_types = request.GET.get("types")
+        get_prices = request.GET.get("prices")
 
-        if get_colors and get_colors != '[]':
-            get_colors = get_colors.replace('"', '')
-            get_colors = get_colors.replace("'", '')
-            get_colors = get_colors.replace('[', '')
-            get_colors = get_colors.replace(']', '')
+        if get_colors and get_colors != "[]":
+            get_colors = get_colors.replace('"', "")
+            get_colors = get_colors.replace("'", "")
+            get_colors = get_colors.replace("[", "")
+            get_colors = get_colors.replace("]", "")
 
-            if ',' in get_colors:
-                for gc in get_colors.split(','):
+            if "," in get_colors:
+                for gc in get_colors.split(","):
                     selected_colors.append(gc.replace("'", ""))
             else:
                 selected_colors.append(get_colors)
 
-        if get_types and get_types != '[]':
-            get_types = get_types.replace('"', '')
-            get_types = get_types.replace("'", '')
-            get_types = get_types.replace('[', '')
-            get_types = get_types.replace(']', '')
+        if get_types and get_types != "[]":
+            get_types = get_types.replace('"', "")
+            get_types = get_types.replace("'", "")
+            get_types = get_types.replace("[", "")
+            get_types = get_types.replace("]", "")
 
-            if ',' in get_types:
-                for gt in get_types.split(','):
+            if "," in get_types:
+                for gt in get_types.split(","):
                     selected_types.append(gt.replace("'", ""))
             else:
                 selected_types.append(get_types)
 
         if get_prices:
-            get_prices = get_prices.split(',')
+            get_prices = get_prices.split(",")
             for rng in get_prices:
                 selected_ranges.append(rng.strip())
-                prices = rng.split('-')
+                prices = rng.split("-")
                 if len(prices) == 2:
                     lp, up = prices[0], prices[1]
-                    if lp == '':
+                    if lp == "":
                         lp = 0
-                    if up == '':
+                    if up == "":
                         up = 1000000
                     lower_price, upper_price = int(lp), int(up)
 
     data_products = []
     print(lower_price, upper_price)
     if len(sorted_categories) > 0:
-        data_products = Product.objects.all().filter(category_id=sorted_categories[0].id)
+        data_products = Product.objects.all().filter(
+            category_id=sorted_categories[0].id
+        )
         category_obj = Category.objects.get(id=sorted_categories[0].id)
         brand = Brand.objects.get(id=category_obj.brand.id)
 
@@ -629,29 +671,31 @@ def category(request, brand):
     profile_status = check_active_profile(request)
 
     context = {
-        'brand_name': brand_obj.name,
-        'logo': brand_obj.logo,
-        'categories': sorted_categories,
-        'banner': Banner.objects.filter(page="categories")[0],
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings
+        "brand_name": brand_obj.name,
+        "logo": brand_obj.logo,
+        "categories": sorted_categories,
+        "banner": Banner.objects.filter(page="categories")[0],
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
     }
 
-    context.update({
-        'category': category,
-        # 'category_name': Category.objects.get(id=38).title,
-        'gender': gender,
-        'products': sorted(display_products, key=lambda x: x.price),
-        'colors': colors,
-        'types': types,
-        'banner': Banner.objects.filter(page="products")[0],
-        'selected_colors': selected_colors,
-        'selected_types': selected_types,
-        'selected_ranges': selected_ranges,
-        'brand_name': brand.name,
-        'extra_products': extra_products,
-        'profile_picture': selected_profile.picture
-    })
+    context.update(
+        {
+            "category": category,
+            # 'category_name': Category.objects.get(id=38).title,
+            "gender": gender,
+            "products": sorted(display_products, key=lambda x: x.price),
+            "colors": colors,
+            "types": types,
+            "banner": Banner.objects.filter(page="products")[0],
+            "selected_colors": selected_colors,
+            "selected_types": selected_types,
+            "selected_ranges": selected_ranges,
+            "brand_name": brand.name,
+            "extra_products": extra_products,
+            "profile_picture": selected_profile.picture,
+        }
+    )
     return HttpResponse(template.render(context, request))
 
 
@@ -689,26 +733,26 @@ def brands(request):
         if not sb_exist:
             sorted_brands.append(b)
 
-    template = loader.get_template('ArjunVaas/brands.html')
+    template = loader.get_template("ArjunVaas/brands.html")
     context = {
-        'brands': sorted_brands,
-        'banner': Banner.objects.filter(page="brand")[0],
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'profile_picture': selected_profile.picture
+        "brands": sorted_brands,
+        "banner": Banner.objects.filter(page="brand")[0],
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "profile_picture": selected_profile.picture,
     }
     return HttpResponse(template.render(context, request))
 
 
-@login_required(login_url='/login/')
+@login_required(login_url="/login/")
 def account_renewal(request):
     global profile_settings, selected_profile
     get_user_profile(request.user)
 
-    template = loader.get_template('ArjunVaas/account-renewal.html')
+    template = loader.get_template("ArjunVaas/account-renewal.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
     }
     return HttpResponse(template.render(context, request))
 
@@ -722,11 +766,11 @@ def account_delete(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    template = loader.get_template('ArjunVaas/account-delete.html')
+    template = loader.get_template("ArjunVaas/account-delete.html")
     context = {
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'profile_picture': selected_profile.picture
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "profile_picture": selected_profile.picture,
     }
     return HttpResponse(template.render(context, request))
 
@@ -740,8 +784,8 @@ def select_profile(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        id = request.POST['select-profile']
+    if request.method == "POST":
+        id = request.POST["select-profile"]
         main_profile = Profile.objects.get(id=id)
         selected_profile = main_profile
         profile_settings.user = main_profile.user
@@ -749,10 +793,10 @@ def select_profile(request):
         profile_settings.active = True
         profile_settings.save()
 
-    return redirect('brands')
+    return redirect("brands")
 
 
-@login_required(login_url='/login/')
+@login_required(login_url="/login/")
 def select_photo(request):
     global profile_settings, selected_profile
     get_user_profile(request.user)
@@ -761,12 +805,12 @@ def select_photo(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        id = request.POST['select-photo']
+    if request.method == "POST":
+        id = request.POST["select-photo"]
         profile_settings.main_profile = Profile.objects.get(id=id)
         profile_settings.save()
 
-    return redirect('user-profile-edit')
+    return redirect("user-profile-edit")
 
 
 # @login_required(login_url='/login/')
@@ -778,9 +822,9 @@ def save_tryon(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        id = request.POST.get('product')
-        try_on_image_type = request.POST.get('try_on_image_type')
+    if request.method == "POST":
+        id = request.POST.get("product")
+        try_on_image_type = request.POST.get("try_on_image_type")
         product = Product.objects.get(id=id)
 
         new_tryon = True
@@ -794,9 +838,9 @@ def save_tryon(request):
             tryon = Tryon()
             tryon.product = product
             tryon.profile = selected_profile
-            if try_on_image_type == 'main_image':
+            if try_on_image_type == "main_image":
                 tryon.image = product.try_on_main_image
-            elif try_on_image_type == 'image1':
+            elif try_on_image_type == "image1":
                 tryon.image = product.try_on_image1
             else:
                 tryon.image = product.try_on_image2
@@ -804,7 +848,7 @@ def save_tryon(request):
             tryon.url = product.url
             tryon.save()
 
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+    return redirect(request.META.get("HTTP_REFERER", "redirect_if_referer_not_found"))
 
 
 # @login_required(login_url='/login/')
@@ -822,14 +866,14 @@ def tryons(request):
     # if isinstance(profile_status, HttpResponse):
     #     return profile_status
 
-    template = loader.get_template('ArjunVaas/tryons.html')
+    template = loader.get_template("ArjunVaas/tryons.html")
     context = {
-        'tryons': tryons,
-        'extra_tryons': extra_tryons,
-        'banner': Banner.objects.filter(page="tryons")[0],
-        'selected_profile': selected_profile,
-        'profile_settings': profile_settings,
-        'profile_picture': selected_profile.picture
+        "tryons": tryons,
+        "extra_tryons": extra_tryons,
+        "banner": Banner.objects.filter(page="tryons")[0],
+        "selected_profile": selected_profile,
+        "profile_settings": profile_settings,
+        "profile_picture": selected_profile.picture,
     }
     return HttpResponse(template.render(context, request))
 
@@ -843,8 +887,14 @@ def delete_tryon(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    if request.method == 'POST':
-        tryon = Tryon.objects.get(id=request.POST['tryon'])
+    if request.method == "POST":
+        tryon = Tryon.objects.get(id=request.POST["tryon"])
         tryon.delete()
 
-    return redirect('tryons')
+    return redirect("tryons")
+
+
+@login_required(login_url="/admin/login/")
+@user_passes_test(lambda user: user.is_superuser)
+def add_image(request):
+    return render(request, "ArjunVaas/add_image.html")
