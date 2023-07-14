@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Image Upload</h2>
+<p>Please select an image to upload:</p>
+
+<form action="/upload_image/" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" id="image" name="image" accept="image/*">
+  <input type="submit" value="Upload Image" name="submit">
+</form>
+
+</body>
+</html>
