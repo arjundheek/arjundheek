@@ -4,6 +4,11 @@ import os
 import random
 import shutil
 from io import BytesIO
+
+from decouple import config
+from django.contrib.messages.storage import session
+from django.urls import reverse
+from requests_oauthlib import OAuth2Session
 from random import randrange
 
 from PIL import Image
@@ -23,6 +28,9 @@ from .serializers import ProductSerializer
 
 selected_profile = Profile()
 profile_settings = ProfileSettings()
+google_client_id = config("GOOGLE_CLIENT_ID")
+google_client_secret = config("GOOGLE_CLIENT_SECRET")
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 
 def get_user_profile(user):
@@ -898,3 +906,60 @@ def delete_tryon(request):
 @user_passes_test(lambda user: user.is_superuser)
 def add_image(request):
     return render(request, "ArjunVaas/add_image.html")
+
+
+def google_auth(request):
+    # Your client id, client secret and redirect_uri from Google Cloud Console
+    client_id = google_client_id
+    # client_secret = "YOUR_CLIENT_SECRET_ID"
+    redirect_uri = request.build_absolute_uri(reverse("google_auth_callback"))
+
+    # Create an OAuth2Session
+    google = OAuth2Session(
+        client_id,
+        redirect_uri=redirect_uri,
+        scope=["https://www.googleapis.com/auth/userinfo.email"],
+    )
+    # Get the authorization URL and state for the session
+    authorization_url, state = google.authorization_url(
+        "https://accounts.google.com/o/oauth2/auth",
+        access_type="offline",
+        approval_prompt="force",
+    )
+    # Save the state in the user's session for use in the callback
+    request.session["oauth_state"] = state
+    # Redirect the user to the Google OAuth Server
+    return redirect(authorization_url)
+
+
+def google_auth_callback(request):
+    client_id = google_client_id
+    client_secret = google_client_secret
+    redirect_uri = request.build_absolute_uri(reverse("google_auth_callback"))
+
+    google = OAuth2Session(
+        client_id, state=request.session["oauth_state"], redirect_uri=redirect_uri
+    )
+    # Exchange the authorization token for a access token
+    try:
+        token = google.fetch_token(
+            "https://accounts.google.com/o/oauth2/token",
+            authorization_response=request.build_absolute_uri(),
+            client_secret=client_secret,
+        )
+        # Get the user's email
+        r = google.get("https://www.googleapis.com/oauth2/v1/userinfo")
+        email = r.json()["email"]
+        request.session["email"] = email
+    except Exception as e:
+        print(e)
+
+    return redirect("user-info")
+
+
+def get_email(request):
+    # Retrieve the email from wherever you have stored it server-side
+    email = request.session.get(
+        "email", default=None
+    )  # Fetch email from wherever you have stored
+    return JsonResponse({"email": email})
