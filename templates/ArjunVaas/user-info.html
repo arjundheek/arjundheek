@@ -90,13 +90,32 @@ footer{
 {% block content %}
 
     <main style="margin-top: 3%">
-        <div class="btn_container" style="text-align: center; padding-bottom: 5%;">
-            <form method="post" action="create-new-profile">
-                {% csrf_token %}
-                <div class="vertical-center" style="text-align: center;">
-                    <button class="btn btn-success" style="text-align: center">+ Create new profile</button>
-                </div>
-            </form>
+        <div class="btn_container" style="text-align: center; padding-bottom: 5%; display: flex; justify-content: space-around;">
+          <div class="dropdown">
+            <!-- Trigger Dropdown -->
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-cogs"></i>
+            </button>
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <button class="dropdown-item" type="button">
+                <i class="fa fa-google"></i> <span id="email"></span>
+              </button>
+              <!-- Add more items here -->
+            </div>
+          </div>
+          <form method="post" action="create-new-profile">
+              {% csrf_token %}
+              <div class="vertical-center" style="text-align: center;">
+                  <button class="btn btn-success" style="text-align: center">+ Create new profile</button>
+              </div>
+          </form>
+          <form method="get" action="oauth">
+              {% csrf_token %}
+              <div class="vertical-center" style="text-align: center;">
+                  <button class="btn btn-success" style="text-align: center">Sign in</button>
+              </div>
+          </form>
         </div>
         <div class="container">
             <div class="user-cards">
@@ -178,6 +197,17 @@ footer{
 {% block footerscripts %}
 
     <script>
+      $(document).ready(function() {
+        fetch('/get_email/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.email) {
+                // If email exists in the session, save it to local storage.
+                localStorage.setItem('email', data.email);
+                document.getElementById('email').innerHTML = data.email;
+            }
+        });
+      });
         function delete_profile(id) {
             jQuery.getScript('https://cdn.jsdelivr.net/npm/sweetalert2@11', function () {
                 Swal.fire({
