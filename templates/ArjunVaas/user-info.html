@@ -198,7 +198,7 @@ footer{
 
     <script>
       $(document).ready(function() {
-        fetch('/get_email/')
+        fetch('/get_email')
         .then(response => response.json())
         .then(data => {
             if (data.email) {
