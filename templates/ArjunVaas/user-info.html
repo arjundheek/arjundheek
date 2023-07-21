@@ -91,7 +91,7 @@ footer{
 
     <main style="margin-top: 3%">
         <div class="btn_container" style="text-align: center; padding-bottom: 5%; display: flex; justify-content: space-around;">
-          <div class="dropdown">
+          <div class="dropdown" style="width: 30%">
             <!-- Trigger Dropdown -->
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-cogs"></i>
@@ -102,23 +102,25 @@ footer{
                 <i class="fa fa-google"></i> <span id="email"></span>
               </button>
               <!-- Add more items here -->
+              <button id="logout" class="dropdown-item" type="button" onclick="logout()">
+                <span>Logout</span>
+              </button>
             </div>
           </div>
-          <form method="post" action="create-new-profile">
+          <form method="post" action="create-new-profile" style="text-align: center; width: 70%">
               {% csrf_token %}
-              <div class="vertical-center" style="text-align: center;">
+              <div class="vertical-center" style="text-align: center; width: 66%">
                   <button class="btn btn-success" style="text-align: center">+ Create new profile</button>
-              </div>
-          </form>
-          <form method="get" action="oauth">
-              {% csrf_token %}
-              <div class="vertical-center" style="text-align: center;">
-                  <button class="btn btn-success" style="text-align: center">Sign in</button>
               </div>
           </form>
         </div>
         <div class="container">
             <div class="user-cards">
+            {% if profiles|length == 0 %}
+                <div style="text-align: center; margin-top: 10%">
+                    <h3>No profiles found</h3>
+                </div>
+            {% endif %}
                 {% for profile in profiles %}
                     <div class="user-card">
                         <div class="img-with-text">
@@ -205,6 +207,8 @@ footer{
                 // If email exists in the session, save it to local storage.
                 localStorage.setItem('email', data.email);
                 document.getElementById('email').innerHTML = data.email;
+            } else {
+              document.getElementById('logout').innerHTML = "";
             }
         });
       });
@@ -243,10 +247,16 @@ footer{
             profiles[i].addEventListener('submit', async function (e) {
                 // prevent the form from submitting
                 e.preventDefault();
-                console.log("hi")
                 await removeItemAsync("categoryId")
                 this.submit();
             });
         }
+        function logout() {
+          // Remove local storage variable
+          localStorage.removeItem("email");
+
+          // Hit Django logout URL
+          window.location.href = "/logout";
+      }
     </script>
 {% endblock %}
