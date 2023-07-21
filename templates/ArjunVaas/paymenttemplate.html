@@ -260,7 +260,7 @@
             <img class="header-image {% if request.path == '/tryons' %} active {% endif %}" src="{% static 'ArjunVaas/img/new_home_icons/like.png' %}" style="margin-right: auto; margin-left: auto; width: 20%">
             <span style="color: black;">Wish</span>
         </a></div> -->
-    <div class="col" style="flex: 33.33%"><a href="/user-info">
+    <div class="col" style="flex: 33.33%"><a href="/oauth">
             <img class="header-image {% if request.path == '/' %} active {% endif %}"
                  src=" {% if profile_picture != null %} /{{ profile_picture }}  {%  else %} {% static 'ArjunVaas/img/new_home_icons/profile.png' %} {% endif %} "
                  style="margin-right: auto; margin-left: auto; max-width: 20%;width: 20%;">
@@ -296,7 +296,7 @@
 
     document.querySelectorAll('.header-image').forEach(i => {
         i.addEventListener('click', function(){
-            debugger
+
             let activeImage = document.querySelector('.header-image.active')
             if(activeImage)
             activeImage.classList.remove('active')
