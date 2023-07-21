@@ -389,8 +389,9 @@ def create_new_profile(request):
     email = request.session.get("email", None)
     if not email:
         return redirect("google_auth")
-    user = User.objects.get(email=email)
-    if not user:
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
         user = User()
         user.username = email.split("@")[0]
         user.password = random.randint(100000, 999999)
