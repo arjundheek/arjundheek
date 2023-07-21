@@ -277,8 +277,12 @@ def user_info(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    # profiles = Profile.objects.all().filter(user=request.user)
-    profiles = Profile.objects.all()
+    email = request.session.get("email", None)
+    if email:
+        profiles = Profile.objects.all().filter(email=email.strip())
+    else:
+        profiles = []
+    # profiles = Profile.objects.all()
     for profile in profiles:
         if (
             profile.gender == ""
@@ -382,18 +386,24 @@ def create_new_profile(request):
     if isinstance(profile_status, HttpResponse):
         return profile_status
 
-    new_user = User()
-    new_user.username = random.randint(100000, 999999)
-    new_user.password = random.randint(100000, 999999)
-    new_user.email = random.randint(100000, 999999)
-    new_user.save()
+    email = request.session.get("email", None)
+    if not email:
+        return redirect("google_auth")
+    user = User.objects.get(email=email)
+    if not user:
+        user = User()
+        user.username = email.split("@")[0]
+        user.password = random.randint(100000, 999999)
+        user.email = email
+        user.save()
     new_profile = Profile()
-    new_profile.user = new_user
+    new_profile.user = user
+    new_profile.email = email
     new_profile.save()
 
     selected_profile = new_profile
     profile_settings.main_profile = new_profile
-    profile_settings.user = new_user
+    profile_settings.user = user
     profile_settings.active = True
     profile_settings.save()
 
@@ -909,6 +919,8 @@ def add_image(request):
 
 
 def google_auth(request):
+    if request.session.get("email"):
+        return redirect("user-info")
     # Your client id, client secret and redirect_uri from Google Cloud Console
     client_id = google_client_id
     # client_secret = "YOUR_CLIENT_SECRET_ID"
@@ -963,3 +975,9 @@ def get_email(request):
         "email", default=None
     )  # Fetch email from wherever you have stored
     return JsonResponse({"email": email})
+
+
+def logout(request):
+    # Retrieve the email from wherever you have stored it server-side
+    request.session["email"] = None
+    return redirect("/")
