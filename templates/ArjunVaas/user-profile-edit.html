@@ -4,324 +4,355 @@
 {% load static %}
 
 {% block content %}
-    <img src="{{ img_name }}">
-    <main>
-        <div class="container">
-            <!-- Third row -->
-            <div class="row mt-12 d-flex flex-column align-items-center justify-content-center">
-                <div class="row mt-3">
-                    <div class="col">
-                        Select Skin Color
-                        <hr class="hr-1">
-                    </div>
-                    <div class="col">
-                        {% if selected_profile.skin %}
-                        <a href="#" onclick="window.location.href = 'user-profile'" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                        {% else %}
-                        <a href="#" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                        {% endif %}
-                        <hr class="hr-2">
-                    </div>
-                </div>
-              <div class="thumbnail">
-{#                <div class="preview"></div>#}
-                  <div id="profile_image" class="col-12" style="padding: 10px;">
-                      <div class="rounded shadow border border-dark mx-auto mt-3 d-flex align-items-center justify-content-center">
-                          <img id="profile-picture" src="/{{ selected_profile.picture }}" class="rounded shadow border border-dark mx-auto"
-                               style="width: 100%"/>
-                      </div>
-                  </div>
-              </div>
-{#              <div class="result">#}
-{#                <span>HEX: #22142b</span>#}
-{#                <span>RGB: rgb(34,20,43)</span>#}
-{#              </div>#}
-
-              <canvas id="cs"></canvas>
-            </div>
-            <!-- Fourth row -->
-            <div class="my-margin row mt-5 d-flex flex-column align-items-center justify-content-center">
-                <form method="post" action="user-profile">
-                    {% csrf_token %}
-                    <div class="col-9">
-                        {% if selected_profile.skin %}
-                        <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="{{ selected_profile.skin }}">
-                        {% else %}
-                        <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="#FAC7C8">
-                        {% endif %}
-                        <label for="colorpicker" style="font-size: 70%;">Pick color from facial skin</label>
-                    </div>
-                    {% if selected_profile.skin %}
-                    <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
-                            class="btn btn-primary" style="width: 100%; margin-top: 5%;">Continue
-                    </button>
-                    {% else %}
-                    <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
-                            class="btn btn-primary" style="width: 90%; margin-top: 5%;" disabled>Continue
-                    </button>
-                    {% endif %}
-                </form>
-            <div class="aksh" style="margin-top: 2rem">
-                            <a href="https://www.youtube.com/channel/UC8ghyFMAlJpyrF3Tic3Sukg" style="display: inline;">
-                                <h5 class="tetExplm">See examples how to select skin color.</h5>
-                            </a>
-                        </div>
-            </div>
+  <img src="{{ img_name }}">
+  <main>
+    <div class="container">
+      <!-- Third row -->
+      <div class="row mt-12 d-flex flex-column align-items-center justify-content-center">
+        <div class="row mt-3">
+          <div class="col">
+            Select Skin Color
+            <hr class="hr-1">
+          </div>
+          <div class="col">
+            {% if selected_profile.skin %}
+              <a href="#" onclick="window.location.href = 'user-profile'" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            {% else %}
+              <a href="#" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            {% endif %}
+            <hr class="hr-2">
+          </div>
         </div>
-        <footer>
-    
-            <nav class="mobile-bottom-nav">
-                <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
-                     <a href="/" class="mobile-bottom-nav__item-content">
-                        <i class="fa-solid fa-house IcnFooter"></i>
-                           <h5 class="gghg">Home</h5>
-                     </a>			
-                </div>
-              
-               <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
-                <a href="/tryons" class="mobile-bottom-nav__item-content">
-                   <i class="fa fa-heart IcnFooter"></i>
-                      <h5 class="gghg">Wish List</h5>
-                </a>		
-           </div>
-                
-             
-            </nav>
-        </footer>
-    </main>
+        <div class="thumbnail">
+
+          <div id="profile_image" class="col-12" style="padding: 10px;">
+            <div
+              class="rounded shadow border border-dark mx-auto mt-3 d-flex align-items-center justify-content-center">
+              <img id="profile-picture" src="/{{ selected_profile.picture }}"
+                   class="rounded shadow border border-dark mx-auto"
+                   style="width: 100%"/>
+            </div>
+          </div>
+        </div>
+        {#              <div class="result">#}
+        {#                <span>HEX: #22142b</span>#}
+        {#                <span>RGB: rgb(34,20,43)</span>#}
+        {#              </div>#}
+
+        <canvas id="cs"></canvas>
+      </div>
+      <!-- Fourth row -->
+      <div class="my-margin row mt-5 d-flex flex-column align-items-center justify-content-center">
+        <form method="post" action="user-profile">
+          {% csrf_token %}
+          <div class="col-9">
+            {% if selected_profile.skin %}
+              <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()"
+                     value="{{ selected_profile.skin }}">
+            {% else %}
+              <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="#FAC7C8">
+            {% endif %}
+            <div class="preview" style="background: {{ selected_profile.skin }}"></div>
+            <label for="colorpicker" style="font-size: 70%;">Pick color from facial skin</label>
+          </div>
+          {% if selected_profile.skin %}
+            <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
+                    class="btn btn-primary" style="width: 100%; margin-top: 5%;">Continue
+            </button>
+          {% else %}
+            <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
+                    class="btn btn-primary" style="width: 90%; margin-top: 5%;" disabled>Continue
+            </button>
+          {% endif %}
+        </form>
+        <div class="aksh" style="margin-top: 2rem">
+          <a href="https://www.youtube.com/channel/UC8ghyFMAlJpyrF3Tic3Sukg" style="display: inline;">
+            <h5 class="tetExplm">See examples how to select skin color.</h5>
+          </a>
+        </div>
+      </div>
+    </div>
+    <footer>
+
+      <nav class="mobile-bottom-nav">
+        <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+          <a href="/" class="mobile-bottom-nav__item-content">
+            <i class="fa-solid fa-house IcnFooter"></i>
+            <h5 class="gghg">Home</h5>
+          </a>
+        </div>
+
+        <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+          <a href="/tryons" class="mobile-bottom-nav__item-content">
+            <i class="fa fa-heart IcnFooter"></i>
+            <h5 class="gghg">Wish List</h5>
+          </a>
+        </div>
+
+
+      </nav>
+    </footer>
+  </main>
 
 {% endblock %}
 
 {% block footerscripts %}
-    <script>
-        function update_continue() {
-            document.getElementById('continue_button').disabled = false
-        }
-        var img = _('.thumbnail img'),
-        canvas = _('#cs'),
-        result = _('.result'),
-        preview = _('.preview'),x = '',y = '';
-        
-        
-        
-        // click function
-        img.addEventListener('click', function(e){
-          // chrome
-          if(e.offsetX) {
-            x = e.offsetX;
-            y = e.offsetY;
-          }
-          // firefox
-          else if(e.layerX) {
-            x = e.layerX;
-            y = e.layerY;
-          }
-          useCanvas(canvas,img,function(){
-            // get image data
-            var p = canvas.getContext('2d')
-            .getImageData(x, y, 1, 1).data;
-            // show info
-            {#result.innerHTML = '<span>HEX: '+rgbToHex(p[0],p[1],p[2])+'</span>'+#}
-            {# '<span>RGB:  rgb('+#}
-            {#  p[0]+','+#}
-            {#  p[1]+','+#}
-            {#  p[2]+')</span>';#}
-        
-            // add background in body
-            {#document.body.style.background =rgbToHex(p[0],p[1],p[2]);#}
-            document.getElementById("colorpicker").setAttribute("value", rgbToHex(p[0],p[1],p[2]))
-            document.getElementById('continue_button').disabled = false
-          });
-        },false);
-        
-        // preview function mousemove
-        img.addEventListener('mousemove', function(e){
-          // chrome
-          if(e.offsetX) {
-            x = e.offsetX;
-            y = e.offsetY;
-          }
-          // firefox
-          else if(e.layerX) {
-            x = e.layerX;
-            y = e.layerY;
-          }
-        
-          useCanvas(canvas,img,function(){
-        
-            // get image data
-            var p = canvas.getContext('2d')
-            .getImageData(x, y, 1, 1).data;
-            // show preview color
-            preview.style.background = rgbToHex(p[0],p[1],p[2]);
-          });
-        },false);
-        
-        
-        // canvas function
-        function useCanvas(el,image,callback){
-          el.width = image.width; // img width
-          el.height = image.height; // img height
-          // draw image in canvas tag
-          el.getContext('2d')
-          .drawImage(image, 0, 0, image.width, image.height);
-          return callback();
-        }
-        // short querySelector
-        function _(el){
-          return document.querySelector(el);
-        }
-        
-        // convert rgba to hex
-        // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-        function componentToHex(c) {
-          var hex = c.toString(16);
-          return hex.length == 1 ? "0" + hex : hex;
-        }
-        function rgbToHex(r, g, b) {
-          return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-        }
-        
-        function findPos(obj) {
-            var curleft = 0, curtop = 0;
-            if (obj.offsetParent) {
-                do {
-                    curleft += obj.offsetLeft;
-                    curtop += obj.offsetTop;
-                } while (obj = obj.offsetParent);
-                return { x: curleft, y: curtop };
-            }
-            return undefined;
-        }
-        </script>
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        
-          ga('create', 'UA-46156385-1', 'cssscript.com');
-          ga('send', 'pageview');
-    </script>
-<style>
-    .mobile-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 0;
-  will-change: transform;
-  transform: translateZ(0);
-  display: flex;
-  height: 50px;
-  box-shadow: 0 -2px 40px -2px #db9616;
-  background-color: #272424;
-}
-.mobile-bottom-nav__item {
-  flex-grow: 1;
-  text-align: center;
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-/* .mobile-bottom-nav__item--active {
-  color: red;
-} */
-.mobile-bottom-nav__item-content {
-  display: flex;
-  flex-direction: column;
-}
-h5.gghg {
-    font-size: 13px;
-}
-a.mobile-bottom-nav__item-content {
-    color: #f7ecec;
-}
-.IcnFooter {
-    font-size: 22px;
-    margin-top: 12px;
-}
+  <script>
+    function update_continue() {
+      document.getElementById('continue_button').disabled = false
+    }
 
-img.header-image {
-    position: fixed;
-    right: 0;
-    border-radius: 100%;
-    height: 50px;
-    width: 50px !important;
-    box-shadow: 0 -2px 5px -2px #333;
-    background-color: #fff;
-    left: 41%;
-    padding: 9px;
-    /* height: 65px; */
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%,-50%);
-    /* width: 65px !important; */
-    bottom: 5px;
-    left: 50%;
-    margin: 0 !important;
-    /* width: 23px; */
-}
-footer span {
-    font-size: 0.8rem;
-    display: none;
-}
-.thumbnail{
-  position:relative;
-  display: block;
-  width: 90%;
-  overflow:hidden;
-  margin: 0 auto;
-  margin-top: 60px;
-}
-.thumbnail img {
-  display: block;
-  width: 100%;
-  cursor: crosshair;
-  border: 5px solid #fff;
-  margin: 0 auto;
-}
-.result{
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #000;
-  background: rgba(0, 0, 0, 0.2);
-  color: #fff;
-  margin: 0;
-  padding: 10px 15px;
-  display: block;
-}
-.result span {
-  display: block;
-  font-size: 13px;
-}
-.preview{
-  position:absolute;
-  top:5px;
-  right:5px;
-  display:block;
-  margin:0;
-  padding:0;
-  width:50px;
-  height:50px;
-  border: 5px solid #FFF;
-  border-right: none;
-  border-top: none;
-}
-#cs{
-  display:none;
-}
-@media (min-width:768px){
-  .thumbnail{
-    width:85%;
-  }
-}
-@media (min-width:1024px){
-  .thumbnail{
-    width:55%;
-  }
-}
-</style>
+    var img = _('.thumbnail img'),
+      canvas = _('#cs'),
+      result = _('.result'),
+      preview = _('.preview'), x = '', y = '';
+
+
+    // click function
+    img.addEventListener('click', function (e) {
+      // chrome
+      if (e.offsetX) {
+        x = e.offsetX;
+        y = e.offsetY;
+      }
+      // firefox
+      else if (e.layerX) {
+        x = e.layerX;
+        y = e.layerY;
+      }
+      useCanvas(canvas, img, function () {
+        // get image data
+        var p = canvas.getContext('2d')
+          .getImageData(x, y, 1, 1).data;
+        // show info
+        {#result.innerHTML = '<span>HEX: '+rgbToHex(p[0],p[1],p[2])+'</span>'+#}
+        {# '<span>RGB:  rgb('+#}
+        {#  p[0]+','+#}
+        {#  p[1]+','+#}
+        {#  p[2]+')</span>';#}
+
+        // add background in body
+        {#document.body.style.background =rgbToHex(p[0],p[1],p[2]);#}
+        document.getElementById("colorpicker").setAttribute("value", rgbToHex(p[0], p[1], p[2]))
+        document.getElementById('continue_button').disabled = false
+      });
+    }, false);
+
+    // preview function mousemove
+    img.addEventListener('mousemove', function (e) {
+      // chrome
+      if (e.offsetX) {
+        x = e.offsetX;
+        y = e.offsetY;
+      }
+      // firefox
+      else if (e.layerX) {
+        x = e.layerX;
+        y = e.layerY;
+      }
+
+      useCanvas(canvas, img, function () {
+
+        // get image data
+        var p = canvas.getContext('2d')
+          .getImageData(x, y, 1, 1).data;
+        // show preview color
+        preview.style.background = rgbToHex(p[0], p[1], p[2]);
+      });
+    }, false);
+
+
+    // canvas function
+    function useCanvas(el, image, callback) {
+      el.width = image.width; // img width
+      el.height = image.height; // img height
+      // draw image in canvas tag
+      el.getContext('2d')
+        .drawImage(image, 0, 0, image.width, image.height);
+      return callback();
+    }
+
+    // short querySelector
+    function _(el) {
+      return document.querySelector(el);
+    }
+
+    // convert rgba to hex
+    // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+    function componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    function findPos(obj) {
+      var curleft = 0, curtop = 0;
+      if (obj.offsetParent) {
+        do {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+        return {x: curleft, y: curtop};
+      }
+      return undefined;
+    }
+  </script>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-46156385-1', 'cssscript.com');
+    ga('send', 'pageview');
+  </script>
+  <style>
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 0;
+      will-change: transform;
+      transform: translateZ(0);
+      display: flex;
+      height: 50px;
+      box-shadow: 0 -2px 40px -2px #db9616;
+      background-color: #272424;
+    }
+
+    .mobile-bottom-nav__item {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* .mobile-bottom-nav__item--active {
+	  color: red;
+	} */
+    .mobile-bottom-nav__item-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #colorpicker {
+      display: none;
+    }
+
+    h5.gghg {
+      font-size: 13px;
+    }
+
+    a.mobile-bottom-nav__item-content {
+      color: #f7ecec;
+    }
+
+    .IcnFooter {
+      font-size: 22px;
+      margin-top: 12px;
+    }
+
+    img.header-image {
+      position: fixed;
+      right: 0;
+      border-radius: 100%;
+      height: 50px;
+      width: 50px !important;
+      box-shadow: 0 -2px 5px -2px #333;
+      background-color: #fff;
+      left: 41%;
+      padding: 9px;
+      /* height: 65px; */
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      /* width: 65px !important; */
+      bottom: 5px;
+      left: 50%;
+      margin: 0 !important;
+      /* width: 23px; */
+    }
+
+    footer span {
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .thumbnail {
+      position: relative;
+      display: block;
+      width: 90%;
+      overflow: hidden;
+      margin: 0 auto;
+      margin-top: 60px;
+    }
+
+    .thumbnail img {
+      display: block;
+      width: 100%;
+      cursor: crosshair;
+      border: 5px solid #fff;
+      margin: 0 auto;
+    }
+
+    .result {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: #000;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      margin: 0;
+      padding: 10px 15px;
+      display: block;
+    }
+
+    .result span {
+      display: block;
+      font-size: 13px;
+    }
+
+    .preview {
+      {#position: absolute;#}
+      top: 5px;
+      right: 5px;
+      display: block;
+      margin: 0;
+      padding: 0;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #000;
+      {#border-right: none;#}
+      {#border-top: none;#}
+    }
+
+    #cs {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .thumbnail {
+        width: 85%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .thumbnail {
+        width: 55%;
+      }
+    }
+  </style>
 
 {% endblock %}
