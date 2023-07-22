@@ -93,9 +93,9 @@ footer{
         <div class="btn_container" style="text-align: center; padding-bottom: 5%; display: flex; justify-content: space-around;">
           <div class="dropdown" style="width: 30%">
             <!-- Trigger Dropdown -->
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-cogs"></i>
-            </button>
+            <div class="btn btn-secondary dropdown-toggle" style="background: transparent; border: none; text-align: left" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{% static 'ArjunVaas/img/icons/setting.png' %}" width="40px">
+            </div>
             <!-- Dropdown Menu -->
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <button class="dropdown-item" type="button">
@@ -117,8 +117,8 @@ footer{
         <div class="container">
             <div class="user-cards">
             {% if profiles|length == 0 %}
-                <div style="text-align: center; margin-top: 10%">
-                    <h3>No profiles found</h3>
+                <div style="text-align: center;">
+                    <img src="{% static 'ArjunVaas/img/no_profile.jpg' %}">
                 </div>
             {% endif %}
                 {% for profile in profiles %}
