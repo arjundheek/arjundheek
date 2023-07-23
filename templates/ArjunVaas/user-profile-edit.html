@@ -1,262 +1,358 @@
-{% extends "ArjunVaas/paymenttemplate.html" %}
+{% extends "ArjunVaas/hometemplate.html" %}
+
+
 {% load static %}
 
-{% block headerscripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <style>
-        body {
-            background-color: #ffffff !important;
-        }
-        
-        .mobile-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  will-change: transform;
-  transform: translateZ(0);
-  display: flex;
-  height: 60px;
-  box-shadow: 0 -2px 5px -2px #333;
-  background-color: #272424;
-}
-.mobile-bottom-nav__item {
-  flex-grow: 1;
-  text-align: center;
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-/* .mobile-bottom-nav__item--active {
-  color: red;
-} */
-.mobile-bottom-nav__item-content {
-  display: flex;
-  flex-direction: column;
-}
-h5.gghg {
-    font-size: 13px;
-}
-a.mobile-bottom-nav__item-content {
-    color: #f7ecec;
-}
-footer {
-    position: sticky !important;
-}
-.IcnFooter {
-    font-size: 22px;
-    margin-top: 12px;
-}
-/* img.header-image {
-    display: none;
-}
-footer span {
-    display: none;
-    font-size: 0.8rem;
-} */
-img.header-image {
-    position: fixed;
-    right: 0;
-    border-radius: 100%;
-    height: 50px;
-    width: 50px !important;
-    box-shadow: 0 -2px 5px -2px #333;
-    background-color: #fff;
-    left: 41%;
-    padding: 9px;
-    /* height: 65px; */
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%,-50%);
-    /* width: 65px !important; */
-    bottom: 5px;
-    left: 50%;
-    margin: 0 !important;
-    /* width: 23px; */
-}
-footer span {
-    font-size: 0.8rem;
-    display: none;
-}
-footer{
-    position: sticky !important;
-    margin-bottom:20px;
-}
-
-    </style>
-{% endblock %}
-
 {% block content %}
+  <img src="{{ img_name }}">
+  <main>
+    <div class="container">
+      <!-- Third row -->
+      <div class="row mt-12 d-flex flex-column align-items-center justify-content-center">
+        <div class="row mt-3">
+          <div class="col">
+            Select Skin Color
+            <hr class="hr-1">
+          </div>
+          <div class="col">
+            {% if selected_profile.skin %}
+              <a href="#" onclick="window.location.href = 'user-profile'" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            {% else %}
+              <a href="#" style="color: black;">Measurements&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            {% endif %}
+            <hr class="hr-2">
+          </div>
+        </div>
+        <div class="thumbnail">
 
-    <main style="margin-top: 3%">
-        <div class="btn_container" style="text-align: center; padding-bottom: 5%; display: flex; justify-content: space-around;">
-          <div class="dropdown" style="width: 30%">
-            <!-- Trigger Dropdown -->
-            <div class="btn btn-secondary dropdown-toggle" style="background: transparent; border: none; text-align: left" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="{% static 'ArjunVaas/img/icons/setting.png' %}" width="40px">
-            </div>
-            <!-- Dropdown Menu -->
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <button class="dropdown-item" type="button">
-                <i class="fa fa-google"></i> <span id="email"></span>
-              </button>
-              <!-- Add more items here -->
-              <button id="logout" class="dropdown-item" type="button" onclick="logout()">
-                <span>Logout</span>
-              </button>
+          <div id="profile_image" class="col-12" style="padding: 10px;">
+            <div
+              class="rounded shadow border border-dark mx-auto mt-3 d-flex align-items-center justify-content-center">
+              <img id="profile-picture" src="/{{ selected_profile.picture }}"
+                   class="rounded shadow border border-dark mx-auto"
+                   style="width: 100%"/>
             </div>
           </div>
-          <form method="post" action="create-new-profile" style="text-align: center; width: 70%">
-              {% csrf_token %}
-              <div class="vertical-center" style="text-align: center; width: 66%">
-                  <button class="btn btn-success" style="text-align: center">+ Create new profile</button>
-              </div>
-          </form>
         </div>
-        <div class="container">
-            <div class="user-cards">
-            {% if profiles|length == 0 %}
-                <div style="text-align: center;">
-                    <img src="{% static 'ArjunVaas/img/no_profile.jpg' %}">
-                </div>
-            {% endif %}
-                {% for profile in profiles %}
-                    <div class="user-card">
-                        <div class="img-with-text">
-                            <img src="/{{ profile.picture }}" style="height: 100px;" alt=""
-                                 class="user-card__img">
+        {#              <div class="result">#}
+        {#                <span>HEX: #22142b</span>#}
+        {#                <span>RGB: rgb(34,20,43)</span>#}
+        {#              </div>#}
 
-                        </div>
-                        <div class="user-card__body">
-                            <h3 class="user-card__title">{{ profile.name }}</h3>
-                            <p class="user-card__text mb-1">Gender: {{ profile.gender }}</p>
-                            <p class="user-card__text mb-1">
-                                Age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ profile.age }}</p>
-                            <p class="user-card__text mb-1">Height&nbsp;&nbsp;: {{ profile.height }}</p>
-                            <p class="user-card__text mb-1">
-                                Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ profile.size }}</p>
-                        </div>
-                        <div class="user-card__body">
-                            <div style="display: flex">
-                                <form method="post" action="edit-profile">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-dark mr-2" style="width: 75px">Edit</button>
-                                    <input type="text" name="edit-profile" value="{{ profile.id }}" hidden>
-                                </form>
-                                <form id="delete-profile-{{ profile.id }}" method="post" action="delete-profile" style="margin-left: auto;">
-                                    {% csrf_token %}
-                                    <button type="button" class="btn btn-danger" onclick="delete_profile({{ profile.id }})">Delete</button>
-                                    <input type="text" name="delete-profile" value="{{ profile.id }}" hidden>
-                                </form>
-                            </div>
-                            <div style="width: 100%; text-align: center;">
-                                <form  style="margin-top: 5%;" method="post" action="select-profile" class="user-card-form">
-                                    {% csrf_token %}
-                                    {% if profile.active %}
-                                        <button style="width: 100%"  type="submit" class="btn btn-primary"
-                                                style="width: 75px">Select profile
-                                    {% else %}
-                                        <button style="width: 100%" type="submit" class="btn btn-primary"
-                                                style="width: 75px" disabled>Select profile
-                                    {% endif %}
-                                    </button>
-                                    <input type="text" name="select-profile" value="{{ profile.id }}" hidden>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    
-                {% endfor %}
-            </div>
-            
+        <canvas id="cs"></canvas>
+      </div>
+      <!-- Fourth row -->
+      <div class="my-margin row mt-5 d-flex flex-column align-items-center justify-content-center">
+        <form method="post" action="user-profile">
+          {% csrf_token %}
+          <div class="col-9">
+            {% if selected_profile.skin %}
+              <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()"
+                     value="{{ selected_profile.skin }}">
+            {% else %}
+              <input type="color" id="colorpicker" name="colorpicker" onchange="update_continue()" value="#FAC7C8">
+            {% endif %}
+            <div class="preview" style="background: {{ selected_profile.skin }}"></div>
+            <label for="colorpicker" style="font-size: 70%;">Pick color from facial skin</label>
+          </div>
+          {% if selected_profile.skin %}
+            <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
+                    class="btn btn-primary" style="width: 100%; margin-top: 5%;">Continue
+            </button>
+          {% else %}
+            <button type="submit" id="continue_button" onclick="window.location.href = 'user-profile'"
+                    class="btn btn-primary" style="width: 90%; margin-top: 5%;" disabled>Continue
+            </button>
+          {% endif %}
+        </form>
+        <div class="aksh" style="margin-top: 2rem">
+          <a href="https://www.youtube.com/channel/UC8ghyFMAlJpyrF3Tic3Sukg" style="display: inline;">
+            <h5 class="tetExplm">See examples how to select skin color.</h5>
+          </a>
         </div>
-        <footer>
-    
-            <nav class="mobile-bottom-nav">
-                <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
-                     <a href="/" class="mobile-bottom-nav__item-content">
-                        <i class="fa-solid fa-house IcnFooter"></i>
-                           <h5 class="gghg">Home</h5>
-                     </a>		
-                </div>
-              
-               <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
-                <a href="/tryons" class="mobile-bottom-nav__item-content">
-                   <i class="fa fa-heart IcnFooter"></i>
-                      <h5 class="gghg">Wish List</h5>
-                </a>		
-           </div>
-                
-             
-            </nav>
-        </footer>
-  
-    </main>
+      </div>
+    </div>
+    <footer>
+
+      <nav class="mobile-bottom-nav">
+        <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+          <a href="/" class="mobile-bottom-nav__item-content">
+            <i class="fa-solid fa-house IcnFooter"></i>
+            <h5 class="gghg">Home</h5>
+          </a>
+        </div>
+
+        <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+          <a href="/tryons" class="mobile-bottom-nav__item-content">
+            <i class="fa fa-heart IcnFooter"></i>
+            <h5 class="gghg">Wish List</h5>
+          </a>
+        </div>
+
+
+      </nav>
+    </footer>
+  </main>
 
 {% endblock %}
 
 {% block footerscripts %}
+  <script>
+    function update_continue() {
+      document.getElementById('continue_button').disabled = false
+    }
 
-    <script>
-      $(document).ready(function() {
-        fetch('/get_email')
-        .then(response => response.json())
-        .then(data => {
-            if (data.email) {
-                // If email exists in the session, save it to local storage.
-                localStorage.setItem('email', data.email);
-                document.getElementById('email').innerHTML = data.email;
-            } else {
-              document.getElementById('logout').innerHTML = "";
-            }
-        });
-      });
-        function delete_profile(id) {
-            jQuery.getScript('https://cdn.jsdelivr.net/npm/sweetalert2@11', function () {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your profile has been deleted.',
-                            'success'
-                        )
+    var img = _('.thumbnail img'),
+      canvas = _('#cs'),
+      result = _('.result'),
+      preview = _('.preview'), x = '', y = '';
 
-                        document.getElementById("delete-profile-"+id).submit();
-                    }
-                })
 
-            })
-        }
-        function removeItemAsync(item) {
-    return new Promise((resolve) => {
-        localStorage.removeItem(item);
-        resolve();
-    });
-}
-        let profiles = document.getElementsByClassName("user-card-form");
-        for (let i = 0; i < profiles.length; i++) {
-            profiles[i].addEventListener('submit', async function (e) {
-                // prevent the form from submitting
-                e.preventDefault();
-                await removeItemAsync("categoryId")
-                this.submit();
-            });
-        }
-        function logout() {
-          // Remove local storage variable
-          localStorage.removeItem("email");
-
-          // Hit Django logout URL
-          window.location.href = "/logout";
+    // click function
+    img.addEventListener('click', function (e) {
+      // chrome
+      if (e.offsetX) {
+        x = e.offsetX;
+        y = e.offsetY;
       }
-    </script>
+      // firefox
+      else if (e.layerX) {
+        x = e.layerX;
+        y = e.layerY;
+      }
+      useCanvas(canvas, img, function () {
+        // get image data
+        var p = canvas.getContext('2d')
+          .getImageData(x, y, 1, 1).data;
+        // show info
+        {#result.innerHTML = '<span>HEX: '+rgbToHex(p[0],p[1],p[2])+'</span>'+#}
+        {# '<span>RGB:  rgb('+#}
+        {#  p[0]+','+#}
+        {#  p[1]+','+#}
+        {#  p[2]+')</span>';#}
+
+        // add background in body
+        {#document.body.style.background =rgbToHex(p[0],p[1],p[2]);#}
+        document.getElementById("colorpicker").setAttribute("value", rgbToHex(p[0], p[1], p[2]))
+        document.getElementById('continue_button').disabled = false
+      });
+    }, false);
+
+    // preview function mousemove
+    img.addEventListener('mousemove', function (e) {
+      // chrome
+      if (e.offsetX) {
+        x = e.offsetX;
+        y = e.offsetY;
+      }
+      // firefox
+      else if (e.layerX) {
+        x = e.layerX;
+        y = e.layerY;
+      }
+
+      useCanvas(canvas, img, function () {
+
+        // get image data
+        var p = canvas.getContext('2d')
+          .getImageData(x, y, 1, 1).data;
+        // show preview color
+        preview.style.background = rgbToHex(p[0], p[1], p[2]);
+      });
+    }, false);
+
+
+    // canvas function
+    function useCanvas(el, image, callback) {
+      el.width = image.width; // img width
+      el.height = image.height; // img height
+      // draw image in canvas tag
+      el.getContext('2d')
+        .drawImage(image, 0, 0, image.width, image.height);
+      return callback();
+    }
+
+    // short querySelector
+    function _(el) {
+      return document.querySelector(el);
+    }
+
+    // convert rgba to hex
+    // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+    function componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    function findPos(obj) {
+      var curleft = 0, curtop = 0;
+      if (obj.offsetParent) {
+        do {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+        return {x: curleft, y: curtop};
+      }
+      return undefined;
+    }
+  </script>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-46156385-1', 'cssscript.com');
+    ga('send', 'pageview');
+  </script>
+  <style>
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 0;
+      will-change: transform;
+      transform: translateZ(0);
+      display: flex;
+      height: 50px;
+      box-shadow: 0 -2px 40px -2px #db9616;
+      background-color: #272424;
+    }
+
+    .mobile-bottom-nav__item {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* .mobile-bottom-nav__item--active {
+	  color: red;
+	} */
+    .mobile-bottom-nav__item-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #colorpicker {
+      display: none;
+    }
+
+    h5.gghg {
+      font-size: 13px;
+    }
+
+    a.mobile-bottom-nav__item-content {
+      color: #f7ecec;
+    }
+
+    .IcnFooter {
+      font-size: 22px;
+      margin-top: 12px;
+    }
+
+    img.header-image {
+      position: fixed;
+      right: 0;
+      border-radius: 100%;
+      height: 50px;
+      width: 50px !important;
+      box-shadow: 0 -2px 5px -2px #333;
+      background-color: #fff;
+      left: 41%;
+      padding: 9px;
+      /* height: 65px; */
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      /* width: 65px !important; */
+      bottom: 5px;
+      left: 50%;
+      margin: 0 !important;
+      /* width: 23px; */
+    }
+
+    footer span {
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .thumbnail {
+      position: relative;
+      display: block;
+      width: 90%;
+      overflow: hidden;
+      margin: 0 auto;
+      margin-top: 60px;
+    }
+
+    .thumbnail img {
+      display: block;
+      width: 100%;
+      cursor: crosshair;
+      border: 5px solid #fff;
+      margin: 0 auto;
+    }
+
+    .result {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: #000;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      margin: 0;
+      padding: 10px 15px;
+      display: block;
+    }
+
+    .result span {
+      display: block;
+      font-size: 13px;
+    }
+
+    .preview {
+      {#position: absolute;#}
+      top: 5px;
+      right: 5px;
+      display: block;
+      margin: 0;
+      padding: 0;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #000;
+      {#border-right: none;#}
+      {#border-top: none;#}
+    }
+
+    #cs {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .thumbnail {
+        width: 85%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .thumbnail {
+        width: 55%;
+      }
+    }
+  </style>
+
 {% endblock %}
